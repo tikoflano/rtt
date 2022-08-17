@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular-builders/custom-webpack:browser",
           "options": {
+            "deployUrl": "static/frontend/",
             "outputPath": "dist/frontend",
             "index": "",
             "main": "src/main.ts",
@@ -35,7 +36,8 @@
             "scripts": [],
             "customWebpackConfig": {
               "path": "./custom-webpack.config.js"
-            }
+            },
+            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
             "production": {
@@ -103,7 +105,8 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           }
         }
       }

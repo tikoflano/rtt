@@ -1,21 +1,14 @@
-import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
+import { fromWorker } from 'observable-webworker';
 import {
   filter,
-  interval,
   map,
   Observable,
   Subject,
-  takeUntil,
   withLatestFrom,
   BehaviorSubject,
   Subscription,
-  tap,
+  share,
 } from 'rxjs';
 
 @Component({
@@ -41,7 +34,14 @@ export class TimerComponent implements OnDestroy {
   }
 
   public start() {
-    this.backgroundTimer$ = interval(10).pipe(takeUntil(this.stopTimer$));
+    this.backgroundTimer$ = fromWorker<boolean, number>(
+      () =>
+        new Worker(new URL('./timer.worker', import.meta.url), {
+          type: 'module',
+        }),
+      this.stopTimer$
+    ).pipe(share());
+
     this.displayTimer$ = this.backgroundTimer$.pipe(
       withLatestFrom(this.pauseTimer$),
       filter(([_, paused]) => !paused),
