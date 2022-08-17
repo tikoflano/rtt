@@ -1,0 +1,17 @@
+{% load render_bundle from webpack_loader %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Race Time Tracker</title>
+    <meta name="description" content="Time tracker for races" />
+    <meta name="keywords" content="time,tracker,race" />
+    <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+    {% render_bundle 'styles' 'css' %}
+  </head>
+  <body>
+    <app-root></app-root> 
+    {% render_bundle 'polyfills' 'js' %}
+    {% render_bundle 'main' 'js' %}
+  </body>
+</html>

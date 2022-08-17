@@ -1,0 +1,27 @@
+<div class="timer">
+  <div>{{ (displayTimer$ | async) ?? 0 | duration }}</div>
+  <button
+    *ngIf="!(backgroundTimer$ | async); else controls"
+    mat-icon-button
+    (click)="start()"
+  >
+    <mat-icon>play_arrow</mat-icon>
+  </button>
+  <ng-template #controls>
+    <ng-container *ngIf="!(stopTimer$ | async)">
+      <ng-container *ngIf="pauseTimer$ | async; else pause_control">
+        <button mat-icon-button (click)="continue()">
+          <mat-icon>update</mat-icon>
+        </button>
+        <button mat-icon-button (click)="stop()">
+          <mat-icon>stop</mat-icon>
+        </button>
+      </ng-container>
+      <ng-template #pause_control>
+        <button mat-icon-button (click)="pause()">
+          <mat-icon>pause</mat-icon>
+        </button>
+      </ng-template>
+    </ng-container>
+  </ng-template>
+</div>

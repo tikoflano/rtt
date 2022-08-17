@@ -1,0 +1,20 @@
+{
+  "name": "Python rtt",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "rtt",
+  "workspaceFolder": "/src",
+  "shutdownAction": "stopCompose",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "batisteo.vscode-django",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "donjayamanne.githistory",
+        "Angular.ng-template"
+      ]
+    }
+  }
+}

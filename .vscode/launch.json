@@ -1,0 +1,27 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Django",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/manage.py",
+      "args": ["runserver", "8181"],
+      "django": true,
+      "justMyCode": true
+    },
+    {
+      "name": "JS: Angular",
+      "type": "chrome",
+      "request": "launch",
+      // You can reuse the same window and profile if your Chrome is running with remote debugger enabled. (Uncomment next line)
+      // "userDataDir": false,
+      // Change the port to 8080 if you are running the debugger for Python App
+      "url": "http://localhost:8181",
+      "webRoot": "${workspaceFolder}/frontend"
+    }
+  ]
+}

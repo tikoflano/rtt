@@ -1,0 +1,7 @@
+node_modules/
+assets/bundles/
+__pycache__
+*.sqlite3
+webpack-stats.json
+webpack-bundles.json
+package-lock.json
