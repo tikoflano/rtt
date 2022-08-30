@@ -11,8 +11,36 @@ services:
     #   - 8008:8000
     # command: python manage.py runserver 0.0.0.0:8000
     command: tail -f /dev/null
-    depends_on: 
+    depends_on:
+      - db
+      - phpmyadmin
       - redis
+
+  db:
+    image: mariadb:10.8
+    environment:
+      MARIADB_ROOT_PASSWORD: $MARIADB_ROOT_PASSWORD
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - 9123:80
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=$MARIADB_ROOT_PASSWORD
+    restart: unless-stopped
+
+  swagger:
+    image: swaggerapi/swagger-ui
+    volumes:
+      - ./schema.yml:/schema.yml
+    environment:
+      - SWAGGER_JSON=/schema.yml
+    ports:
+      - 9124:80
 
   redis:
     image: redis:5
+    restart: unless-stopped

@@ -5,3 +5,4 @@ __pycache__
 webpack-stats.json
 webpack-bundles.json
 package-lock.json
+.env

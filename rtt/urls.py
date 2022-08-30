@@ -15,11 +15,25 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import re_path
+from django.conf.urls import include
 from . import views
 from . import consumers
 
+
 urlpatterns = [
     re_path(r'^admin/', admin.site.urls),
+    re_path(r'^api-auth/', include('rest_framework.urls')),
+]
+
+urlpatterns += [
+    re_path(r'^server_datetime/', views.server_datetime),
+]
+
+urlpatterns += [
+    re_path(r'^api/', include('api.urls', namespace='api')),
+]
+
+urlpatterns += [
     re_path(r'^.*$', views.frontend),
 ]
 

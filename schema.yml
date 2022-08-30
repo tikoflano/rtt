@@ -1,0 +1,703 @@
+openapi: 3.0.3
+info:
+  title: Race Time Tracker API
+  version: 0.1.0
+  description: API for Race Time Tracker
+paths:
+  /api/pilots/:
+    get:
+      operationId: pilots_list
+      tags:
+      - pilots
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pilot'
+          description: ''
+    post:
+      operationId: pilots_create
+      tags:
+      - pilots
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pilot'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pilot'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pilot'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pilot'
+          description: ''
+  /api/pilots/{id}/:
+    get:
+      operationId: pilots_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pilot.
+        required: true
+      tags:
+      - pilots
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pilot'
+          description: ''
+    put:
+      operationId: pilots_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pilot.
+        required: true
+      tags:
+      - pilots
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pilot'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pilot'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pilot'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pilot'
+          description: ''
+    patch:
+      operationId: pilots_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pilot.
+        required: true
+      tags:
+      - pilots
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPilot'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPilot'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPilot'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pilot'
+          description: ''
+    delete:
+      operationId: pilots_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pilot.
+        required: true
+      tags:
+      - pilots
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/races/:
+    get:
+      operationId: races_list
+      tags:
+      - races
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Race'
+          description: ''
+    post:
+      operationId: races_create
+      tags:
+      - races
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Race'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Race'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Race'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Race'
+          description: ''
+  /api/races/{id}/:
+    get:
+      operationId: races_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this race.
+        required: true
+      tags:
+      - races
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Race'
+          description: ''
+    put:
+      operationId: races_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this race.
+        required: true
+      tags:
+      - races
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Race'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Race'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Race'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Race'
+          description: ''
+    patch:
+      operationId: races_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this race.
+        required: true
+      tags:
+      - races
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRace'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRace'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRace'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Race'
+          description: ''
+    delete:
+      operationId: races_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this race.
+        required: true
+      tags:
+      - races
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/races/{race_pk}/descents/:
+    get:
+      operationId: races_descents_list
+      parameters:
+      - in: path
+        name: race_pk
+        schema:
+          type: integer
+        required: true
+      tags:
+      - races
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Descent'
+          description: ''
+    post:
+      operationId: races_descents_create
+      parameters:
+      - in: path
+        name: race_pk
+        schema:
+          type: integer
+        required: true
+      tags:
+      - races
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Descent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Descent'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Descent'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Descent'
+          description: ''
+  /api/races/{race_pk}/descents/{id}/:
+    get:
+      operationId: races_descents_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this descent.
+        required: true
+      - in: path
+        name: race_pk
+        schema:
+          type: integer
+        required: true
+      tags:
+      - races
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Descent'
+          description: ''
+    put:
+      operationId: races_descents_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this descent.
+        required: true
+      - in: path
+        name: race_pk
+        schema:
+          type: integer
+        required: true
+      tags:
+      - races
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Descent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Descent'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Descent'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Descent'
+          description: ''
+    patch:
+      operationId: races_descents_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this descent.
+        required: true
+      - in: path
+        name: race_pk
+        schema:
+          type: integer
+        required: true
+      tags:
+      - races
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDescent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDescent'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDescent'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Descent'
+          description: ''
+    delete:
+      operationId: races_descents_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this descent.
+        required: true
+      - in: path
+        name: race_pk
+        schema:
+          type: integer
+        required: true
+      tags:
+      - races
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/races/{race_pk}/pilots/:
+    get:
+      operationId: races_pilots_list
+      parameters:
+      - in: path
+        name: race_pk
+        schema:
+          type: integer
+        required: true
+      tags:
+      - races
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RacePilot'
+          description: ''
+  /api/races/{race_pk}/pilots/{id}/:
+    get:
+      operationId: races_pilots_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pilot.
+        required: true
+      - in: path
+        name: race_pk
+        schema:
+          type: integer
+        required: true
+      tags:
+      - races
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RacePilot'
+          description: ''
+components:
+  schemas:
+    Descent:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        pilot:
+          type: integer
+        track:
+          type: integer
+        start:
+          type: string
+          format: date-time
+          nullable: true
+        end:
+          type: string
+          format: date-time
+          nullable: true
+        duration:
+          type: integer
+          readOnly: true
+      required:
+      - duration
+      - id
+      - pilot
+      - track
+    PatchedDescent:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        pilot:
+          type: integer
+        track:
+          type: integer
+        start:
+          type: string
+          format: date-time
+          nullable: true
+        end:
+          type: string
+          format: date-time
+          nullable: true
+        duration:
+          type: integer
+          readOnly: true
+    PatchedPilot:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 30
+        last_name:
+          type: string
+          maxLength: 30
+    PatchedRace:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        date:
+          type: string
+          format: date
+        venue:
+          type: integer
+    Pilot:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 30
+        last_name:
+          type: string
+          maxLength: 30
+      required:
+      - first_name
+      - id
+      - last_name
+    Race:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        date:
+          type: string
+          format: date
+        venue:
+          type: integer
+      required:
+      - date
+      - id
+      - name
+      - venue
+    RacePilot:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 30
+        last_name:
+          type: string
+          maxLength: 30
+        descents:
+          type: array
+          items:
+            type: integer
+      required:
+      - descents
+      - first_name
+      - id
+      - last_name
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid

@@ -14,6 +14,8 @@ import { RaceComponent } from './views/race/race.component';
 import { TimerComponent } from './components/timer/timer.component';
 import { ToolBarComponent } from './components/tool-bar/tool-bar.component';
 import { DurationPipe } from './pipes/duration.pipe';
+import { HttpClientModule } from '@angular/common/http';
+import { ServerTimeSyncService } from './services/server-time-sync.service';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,7 @@ import { DurationPipe } from './pipes/duration.pipe';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     MatSliderModule,
     MatToolbarModule,
@@ -32,7 +35,7 @@ import { DurationPipe } from './pipes/duration.pipe';
     MatButtonModule,
     MatTableModule,
   ],
-  providers: [],
+  providers: [ServerTimeSyncService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
