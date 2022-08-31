@@ -15,22 +15,23 @@ class PilotViewSet(viewsets.ModelViewSet):
 class RaceViewSet(viewsets.ModelViewSet):
     queryset = models.Race.objects.all()
     serializer_class = serializers.RaceSerializer
+    lookup_field = 'id'
 
 
 @extend_schema(
     parameters=[
         OpenApiParameter(
-            "race_pk", OpenApiTypes.INT, OpenApiParameter.PATH)])
+            "race_id", OpenApiTypes.INT, OpenApiParameter.PATH)])
 class RacePilotViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.RacePilotSerializer
-    queryset = models.Pilot.objects.all()
+    queryset = models.RacePilot.objects.all()
 
     def get_queryset(self):
-        race_id = self.kwargs.get("race_pk")
+        race_id = self.kwargs.get("race_id")
         race = get_object_or_404(models.Race, pk=race_id)
         return self.queryset.filter(
             race=race).prefetch_related(
-            Prefetch('descents'))
+            Prefetch('pilot__descents'))
 
 
 class RaceDescentViewSet(viewsets.ModelViewSet):
@@ -38,6 +39,6 @@ class RaceDescentViewSet(viewsets.ModelViewSet):
     queryset = models.Descent.objects.all()
 
     def get_queryset(self):
-        race_id = self.kwargs.get("race_pk")
+        race_id = self.kwargs.get("race_id")
         race = get_object_or_404(models.Race, pk=race_id)
         return self.queryset.filter(race=race)

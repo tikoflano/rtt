@@ -298,12 +298,12 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/races/{race_pk}/descents/:
+  /api/races/{race_id}/descents/:
     get:
       operationId: races_descents_list
       parameters:
       - in: path
-        name: race_pk
+        name: race_id
         schema:
           type: integer
         required: true
@@ -325,7 +325,7 @@ paths:
       operationId: races_descents_create
       parameters:
       - in: path
-        name: race_pk
+        name: race_id
         schema:
           type: integer
         required: true
@@ -353,7 +353,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Descent'
           description: ''
-  /api/races/{race_pk}/descents/{id}/:
+  /api/races/{race_id}/descents/{id}/:
     get:
       operationId: races_descents_retrieve
       parameters:
@@ -364,7 +364,7 @@ paths:
         description: A unique integer value identifying this descent.
         required: true
       - in: path
-        name: race_pk
+        name: race_id
         schema:
           type: integer
         required: true
@@ -390,7 +390,7 @@ paths:
         description: A unique integer value identifying this descent.
         required: true
       - in: path
-        name: race_pk
+        name: race_id
         schema:
           type: integer
         required: true
@@ -428,7 +428,7 @@ paths:
         description: A unique integer value identifying this descent.
         required: true
       - in: path
-        name: race_pk
+        name: race_id
         schema:
           type: integer
         required: true
@@ -465,7 +465,7 @@ paths:
         description: A unique integer value identifying this descent.
         required: true
       - in: path
-        name: race_pk
+        name: race_id
         schema:
           type: integer
         required: true
@@ -477,12 +477,12 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/races/{race_pk}/pilots/:
+  /api/races/{race_id}/pilots/:
     get:
       operationId: races_pilots_list
       parameters:
       - in: path
-        name: race_pk
+        name: race_id
         schema:
           type: integer
         required: true
@@ -500,7 +500,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/RacePilot'
           description: ''
-  /api/races/{race_pk}/pilots/{id}/:
+  /api/races/{race_id}/pilots/{id}/:
     get:
       operationId: races_pilots_retrieve
       parameters:
@@ -508,10 +508,10 @@ paths:
         name: id
         schema:
           type: integer
-        description: A unique integer value identifying this pilot.
+        description: A unique integer value identifying this race pilot.
         required: true
       - in: path
-        name: race_pk
+        name: race_id
         schema:
           type: integer
         required: true
@@ -677,22 +677,19 @@ components:
       properties:
         id:
           type: integer
-          readOnly: true
         first_name:
           type: string
-          maxLength: 30
         last_name:
           type: string
-          maxLength: 30
-        descents:
-          type: array
-          items:
-            type: integer
+        number:
+          type: integer
+          maximum: 2147483647
+          minimum: 1
       required:
-      - descents
       - first_name
       - id
       - last_name
+      - number
   securitySchemes:
     basicAuth:
       type: http

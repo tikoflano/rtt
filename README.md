@@ -11,6 +11,7 @@
 - https://github.com/rsinger86/drf-flex-fields
 - https://github.com/alanjds/drf-nested-routers
 - https://github.com/tfranzel/drf-spectacular
+    - `python manage.py spectacular --file schema.yml`
 - https://github.com/fanout/django-eventstream
 
 ### Frontend

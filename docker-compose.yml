@@ -32,15 +32,6 @@ services:
       - PMA_PASSWORD=$MARIADB_ROOT_PASSWORD
     restart: unless-stopped
 
-  swagger:
-    image: swaggerapi/swagger-ui
-    volumes:
-      - ./schema.yml:/schema.yml
-    environment:
-      - SWAGGER_JSON=/schema.yml
-    ports:
-      - 9124:80
-
   redis:
     image: redis:5
     restart: unless-stopped

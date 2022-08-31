@@ -1,3 +1,13 @@
+mat-card {
+  border-radius: 0;
+  mat-card-content {
+    mat-spinner {
+      margin: auto;
+    }
+  }
+}
+
+
 table {
   width: 100%;
 

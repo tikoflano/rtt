@@ -9,6 +9,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { RaceComponent } from './views/race/race.component';
 import { TimerComponent } from './components/timer/timer.component';
@@ -34,6 +36,8 @@ import { ServerTimeSyncService } from './services/server-time-sync.service';
     MatIconModule,
     MatButtonModule,
     MatTableModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
   ],
   providers: [ServerTimeSyncService],
   bootstrap: [AppComponent],

@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.validators import MinValueValidator
 
 class Pilot(models.Model):
     first_name = models.CharField(max_length=30)
@@ -50,7 +50,7 @@ class Race(models.Model):
     date = models.DateField()
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
     championship = models.ForeignKey(Championship, on_delete=models.CASCADE)
-    pilots = models.ManyToManyField(Pilot)
+    pilots = models.ManyToManyField(Pilot, through='RacePilot')
 
     def __str__(self):
         return f"{self.name} - {self.championship} - ({self.venue})"
@@ -79,3 +79,12 @@ class Descent(models.Model):
     class Meta:
         db_table = "descent"
         unique_together = ('race', 'track', 'pilot')
+
+
+class RacePilot(models.Model):
+    pilot = models.ForeignKey(Pilot, on_delete=models.CASCADE)
+    race = models.ForeignKey(Race, on_delete=models.CASCADE)
+    number = models.IntegerField(validators=[MinValueValidator(1)])
+
+    class Meta:
+        db_table = "race_pilot"
