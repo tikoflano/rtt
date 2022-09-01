@@ -500,6 +500,38 @@ paths:
                 items:
                   $ref: '#/components/schemas/RacePilot'
           description: ''
+    post:
+      operationId: races_pilots_create
+      parameters:
+      - in: path
+        name: race_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - races
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RacePilot'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RacePilot'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RacePilot'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RacePilot'
+          description: ''
   /api/races/{race_id}/pilots/{id}/:
     get:
       operationId: races_pilots_retrieve
@@ -527,6 +559,103 @@ paths:
               schema:
                 $ref: '#/components/schemas/RacePilot'
           description: ''
+    put:
+      operationId: races_pilots_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this race pilot.
+        required: true
+      - in: path
+        name: race_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - races
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RacePilot'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RacePilot'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RacePilot'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RacePilot'
+          description: ''
+    patch:
+      operationId: races_pilots_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this race pilot.
+        required: true
+      - in: path
+        name: race_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - races
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRacePilot'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRacePilot'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRacePilot'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RacePilot'
+          description: ''
+    delete:
+      operationId: races_pilots_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this race pilot.
+        required: true
+      - in: path
+        name: race_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - races
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
 components:
   schemas:
     Descent:
@@ -540,7 +669,7 @@ components:
         id:
           type: integer
           readOnly: true
-        pilot:
+        race_pilot:
           type: integer
         track:
           type: integer
@@ -558,7 +687,7 @@ components:
       required:
       - duration
       - id
-      - pilot
+      - race_pilot
       - track
     PatchedDescent:
       type: object
@@ -571,7 +700,7 @@ components:
         id:
           type: integer
           readOnly: true
-        pilot:
+        race_pilot:
           type: integer
         track:
           type: integer
@@ -622,6 +751,28 @@ components:
           format: date
         venue:
           type: integer
+    PatchedRacePilot:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        descents:
+          type: array
+          items:
+            type: integer
+        number:
+          type: integer
+          maximum: 2147483647
+          minimum: 1
     Pilot:
       type: object
       description: |-
@@ -681,11 +832,16 @@ components:
           type: string
         last_name:
           type: string
+        descents:
+          type: array
+          items:
+            type: integer
         number:
           type: integer
           maximum: 2147483647
           minimum: 1
       required:
+      - descents
       - first_name
       - id
       - last_name

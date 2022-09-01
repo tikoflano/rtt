@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 
+
 class Pilot(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
@@ -59,10 +60,18 @@ class Race(models.Model):
         db_table = "race"
 
 
-class Descent(models.Model):
-    pilot = models.ForeignKey(
-        Pilot, related_name="descents", on_delete=models.CASCADE)
+class RacePilot(models.Model):
+    pilot = models.ForeignKey(Pilot, on_delete=models.CASCADE)
     race = models.ForeignKey(Race, on_delete=models.CASCADE)
+    number = models.IntegerField(validators=[MinValueValidator(1)])
+
+    class Meta:
+        db_table = "race_pilot"
+
+
+class Descent(models.Model):
+    race_pilot = models.ForeignKey(
+        RacePilot, related_name="descents", on_delete=models.CASCADE)
     track = models.ForeignKey(Track, on_delete=models.CASCADE)
     start = models.DateTimeField(null=True)
     end = models.DateTimeField(null=True)
@@ -78,13 +87,4 @@ class Descent(models.Model):
 
     class Meta:
         db_table = "descent"
-        unique_together = ('race', 'track', 'pilot')
-
-
-class RacePilot(models.Model):
-    pilot = models.ForeignKey(Pilot, on_delete=models.CASCADE)
-    race = models.ForeignKey(Race, on_delete=models.CASCADE)
-    number = models.IntegerField(validators=[MinValueValidator(1)])
-
-    class Meta:
-        db_table = "race_pilot"
+        unique_together = ('race_pilot', 'track')

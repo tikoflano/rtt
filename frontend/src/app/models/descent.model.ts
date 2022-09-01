@@ -1,8 +1,8 @@
-import { Pilot } from './pilot.model';
+import { RacePilot } from './pilot.model';
 
 export interface Descent {
   readonly id: number;
-  pilot: Pilot;
+  race_pilot: RacePilot;
   track: string;
   start: Date | null;
   end: Date | null;

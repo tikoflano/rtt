@@ -1,4 +1,10 @@
-import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+} from '@angular/core';
 import { fromWorker } from 'observable-webworker';
 import {
   filter,
@@ -21,9 +27,17 @@ export class TimerComponent implements OnDestroy {
 
   public backgroundTimer$: Observable<number> = new Observable();
   public displayTimer$: Observable<number> = new Observable();
+  private offset$: BehaviorSubject<number> = new BehaviorSubject(0);
 
   public pauseTimer$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public stopTimer$: Subject<boolean> = new Subject();
+
+  @Input() set offset(value: number | null) {
+    if (!value) return;
+
+    this.offset$.next(value);
+    this.start();
+  }
 
   @Output() started = new EventEmitter<null>();
   @Output() paused = new EventEmitter<number>();
@@ -43,9 +57,9 @@ export class TimerComponent implements OnDestroy {
     ).pipe(share());
 
     this.displayTimer$ = this.backgroundTimer$.pipe(
-      withLatestFrom(this.pauseTimer$),
-      filter(([_, paused]) => !paused),
-      map(([timer]) => timer)
+      withLatestFrom(this.offset$, this.pauseTimer$),
+      filter(([_, __, paused]) => !paused),
+      map(([timer, offset]) => timer + offset)
     );
 
     const pauseEventSub = this.pauseTimer$

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Subject } from 'rxjs';
+import { map, ReplaySubject, share } from 'rxjs';
 
 interface ServerDateTimeResponse {
   datetime: Date;
 }
 
 @Injectable()
-export class ServerTimeSyncService {
-  private serverTime$: Subject<Date> = new Subject();
+export class ServerTimeServiceService {
+  private serverOffset$: ReplaySubject<number> = new ReplaySubject();
 
   constructor(private http: HttpClient) {
     this.syncTime();
@@ -29,9 +29,14 @@ export class ServerTimeSyncService {
         const tClient = tServer.getTime() + (t1.getTime() - t0.getTime()) / 2;
 
         const serverTime = new Date(tClient);
+        const offset = serverTime.getTime() - new Date().getTime();
 
-        this.serverTime$.next(serverTime);
-        console.log(`Server time synced: ${serverTime}`);
+        this.serverOffset$.next(offset);
+        console.log(`Server time synced: ${serverTime}. Offset: ${offset}ms`);
       });
+  }
+
+  public getServerOffset() {
+    return this.serverOffset$.asObservable().pipe(share());
   }
 }

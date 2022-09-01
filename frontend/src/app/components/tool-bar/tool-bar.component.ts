@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ServerTimeSyncService } from 'src/app/services/server-time-sync.service';
 
 @Component({
   selector: 'app-tool-bar',
@@ -7,7 +6,7 @@ import { ServerTimeSyncService } from 'src/app/services/server-time-sync.service
   styleUrls: ['./tool-bar.component.scss'],
 })
 export class ToolBarComponent implements OnInit {
-  constructor(serverTimeSyncService: ServerTimeSyncService) {}
+  constructor() {}
 
   ngOnInit(): void {}
 }

@@ -29,7 +29,7 @@ class RaceAdmin(admin.ModelAdmin):
 
 
 class DescentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'pilot', 'race', 'track', 'start')
+    list_display = ('id', 'race_pilot', 'track', 'start')
 
 
 admin.site.register(models.Pilot, PilotAdmin)

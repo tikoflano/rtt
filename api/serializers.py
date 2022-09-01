@@ -37,9 +37,9 @@ class DescentSerializer(FlexFieldsModelSerializer):
 
     class Meta:
         model = models.Descent
-        fields = ['id', 'pilot', 'track', 'start', 'end', 'duration']
+        fields = ['id', 'race_pilot', 'track', 'start', 'end', 'duration']
         expandable_fields = {
-            'pilot': PilotSerializer,
+            'race_pilot': ('api.RacePilotSerializer', {'many': False}),
             'track': TrackSerializer
         }
 
@@ -57,10 +57,8 @@ class RacePilotSerializer(FlexFieldsModelSerializer):
     id = serializers.IntegerField(source='pilot.id')
     first_name = serializers.CharField(source='pilot.first_name')
     last_name = serializers.CharField(source='pilot.last_name')
-    descents = DescentSerializer(source='pilot.descents', many=True)
 
     class Meta():
         model = models.RacePilot
         fields = ['id', 'first_name', 'last_name', 'descents', 'number']
-        expandable_fields = {'descents': (
-            DescentSerializer, {'many': True, 'source': 'pilot.descents'})}
+        expandable_fields = {'descents': (DescentSerializer, {'many': True})}

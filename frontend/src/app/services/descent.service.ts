@@ -11,9 +11,7 @@ import {
   ReplaySubject,
 } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class DescentService {
   private descents$: ReplaySubject<Descent[]> = new ReplaySubject(1);
   private loading$: BehaviorSubject<boolean> = new BehaviorSubject(true);
@@ -25,7 +23,9 @@ export class DescentService {
     this.loading$.next(true);
 
     const obs$ = this.http
-      .get<Descent[]>(`/api/races/${race_id}/descents/?expand=pilot`)
+      .get<Descent[]>(
+        `/api/races/${race_id}/descents/?expand=race_pilot&omit=race_pilot.descents`
+      )
       .pipe(
         finalize(() => this.loading$.next(false)),
         shareReplay(1)

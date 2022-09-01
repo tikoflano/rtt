@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -17,7 +17,10 @@ import { TimerComponent } from './components/timer/timer.component';
 import { ToolBarComponent } from './components/tool-bar/tool-bar.component';
 import { DurationPipe } from './pipes/duration.pipe';
 import { HttpClientModule } from '@angular/common/http';
-import { ServerTimeSyncService } from './services/server-time-sync.service';
+import { ServerTimeServiceService } from './services/server-time.service';
+import { DescentService } from './services/descent.service';
+import { ClientDatePipe } from './pipes/client-date.pipe';
+import { DateDiffPipe } from './pipes/date-diff.pipe';
 
 @NgModule({
   declarations: [
@@ -26,6 +29,8 @@ import { ServerTimeSyncService } from './services/server-time-sync.service';
     TimerComponent,
     ToolBarComponent,
     DurationPipe,
+    ClientDatePipe,
+    DateDiffPipe,
   ],
   imports: [
     BrowserModule,
@@ -39,7 +44,18 @@ import { ServerTimeSyncService } from './services/server-time-sync.service';
     MatCardModule,
     MatProgressSpinnerModule,
   ],
-  providers: [ServerTimeSyncService],
+  providers: [
+    // https://stackoverflow.com/a/41614974/974822s
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [ServerTimeServiceService],
+      useFactory: (serverTimeServiceService: ServerTimeServiceService) => () =>
+        null,
+    },
+    ServerTimeServiceService,
+    DescentService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
