@@ -13,41 +13,78 @@ import {
 
 @Injectable()
 export class DescentService {
-  private descents$: ReplaySubject<Descent[]> = new ReplaySubject(1);
-  private loading$: BehaviorSubject<boolean> = new BehaviorSubject(true);
-  private error$: Subject<string> = new Subject();
+  private descents$: BehaviorSubject<Descent[]> = new BehaviorSubject(
+    [] as Descent[]
+  );
+
+  private getLoading$: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  private getError$: Subject<string> = new Subject();
+  private patchLoading$: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  private patchError$: Subject<string> = new Subject();
 
   constructor(private http: HttpClient) {}
 
+  public getDescents(): Observable<Descent[]> {
+    return this.descents$.asObservable();
+  }
+
   public loadDescents(race_id: Race['id']) {
-    this.loading$.next(true);
+    this.getLoading$.next(true);
 
     const obs$ = this.http
       .get<Descent[]>(
         `/api/races/${race_id}/descents/?expand=race_pilot&omit=race_pilot.descents`
       )
       .pipe(
-        finalize(() => this.loading$.next(false)),
+        finalize(() => this.getLoading$.next(false)),
         shareReplay(1)
       );
 
     obs$.subscribe({
       next: (descents) => this.descents$.next(descents),
-      error: (err) => this.error$.next(err),
+      error: (err) => this.getError$.next(err),
     });
 
     return obs$;
   }
 
-  public getDescents(): Observable<Descent[]> {
-    return this.descents$.asObservable();
-  }
-
   public getLoading(): Observable<boolean> {
-    return this.loading$.asObservable();
+    return this.getLoading$.asObservable();
   }
 
   public getError(): Observable<string> {
-    return this.error$.asObservable();
+    return this.getError$.asObservable();
+  }
+
+  public updateDescent(
+    raceId: Race['id'],
+    descent: Partial<Descent> & Pick<Descent, 'id'>
+  ) {
+    const obs$ = this.http
+      .patch<Descent>(
+        `/api/races/${raceId}/descents/${descent.id}/?expand=race_pilot&omit=race_pilot.descents`,
+        descent
+      )
+      .pipe(
+        finalize(() => this.patchLoading$.next(false)),
+        shareReplay(1)
+      );
+    obs$.subscribe({
+      next: (descent) => {
+        const descents = this.descents$.getValue();
+        descents[descents.findIndex((el) => el.id === descent.id)] = descent;
+        this.descents$.next(descents);
+      },
+      error: (err) => this.patchError$.next(err),
+    });
+    return obs$;
+  }
+
+  public patchLoading(): Observable<boolean> {
+    return this.patchLoading$.asObservable();
+  }
+
+  public patchError(): Observable<string> {
+    return this.patchError$.asObservable();
   }
 }

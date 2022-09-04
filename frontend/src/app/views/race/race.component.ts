@@ -18,6 +18,8 @@ export class RaceComponent implements OnInit {
 
   public serverOffset$: Observable<number>;
 
+  private raceId = 1;
+
   constructor(
     private serverTimeServiceService: ServerTimeServiceService,
     private descentService: DescentService
@@ -30,12 +32,26 @@ export class RaceComponent implements OnInit {
 
     this.serverOffset$ = this.serverTimeServiceService.getServerOffset();
 
-    // this.serverOffset$.subscribe((offset) => alert(offset));
-
-    this.descentService.loadDescents(1);
+    this.descentService.loadDescents(this.raceId);
   }
 
-  sendTime(element: { number: number; name: string }, txt: any): void {
-    console.log(element.name, txt);
+  trackDescent(index: number, descent: Descent): string {
+    return `${descent.id}`;
+  }
+
+  sendStartTime(descent: Descent): void {
+    this.descentService.updateDescent(this.raceId, {
+      id: descent.id,
+      start: new Date().toISOString(),
+    });
+  }
+
+  sendEndTime(descent: Descent, duration: number): void {
+    const start = new Date(descent.start as string);
+
+    this.descentService.updateDescent(this.raceId, {
+      id: descent.id,
+      end: new Date(start.getTime() + duration).toISOString(),
+    });
   }
 }

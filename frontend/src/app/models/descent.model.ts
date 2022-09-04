@@ -4,7 +4,7 @@ export interface Descent {
   readonly id: number;
   race_pilot: RacePilot;
   track: string;
-  start: Date | null;
-  end: Date | null;
+  start: string | null;
+  end: string | null;
   readonly duration: number;
 }

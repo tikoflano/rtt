@@ -83,7 +83,7 @@ class Descent(models.Model):
         if not self.end:
             return 0
 
-        return (self.end - self.start).total_seconds()
+        return (self.end - self.start).total_seconds() * 100
 
     class Meta:
         db_table = "descent"

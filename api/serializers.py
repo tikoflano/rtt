@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
 import api.models as models
 from django.shortcuts import get_object_or_404
-
+from api.utils import millisecondsDate
 
 class PilotSerializer(FlexFieldsModelSerializer):
     class Meta:
@@ -28,12 +28,37 @@ class TrackSerializer(FlexFieldsModelSerializer):
 class DescentSerializer(FlexFieldsModelSerializer):
     duration = serializers.IntegerField(read_only=True)
 
+    def to_representation(self, instance):
+        repr = super().to_representation(instance)
+        if instance.start is not None:
+            repr["start"] = instance.start.strftime(
+                '%Y-%m-%dT%H:%M:%S.%f')[: -4] + "Z"
+        if instance.end is not None:
+            repr["end"] = instance.end.strftime(
+                '%Y-%m-%dT%H:%M:%S.%f')[: -4] + "Z"
+        return repr
+
     def validate(self, data):
         race_id = self.context["request"].parser_context['kwargs']['race_id']
         race = get_object_or_404(models.Race, pk=race_id)
         data["race"] = race
 
+        start = data.get("start") or self.instance.start
+        end = data.get("end")
+
+        if end is not None and end and not start:
+            raise serializers.ValidationError("descent not started yet")
+
+        if start is not None and end is not None and start > end:
+            raise serializers.ValidationError("end must occur after start")
+
         return data
+
+    def validate_start(self, value):
+        return None if value is None else millisecondsDate(value)
+
+    def validate_end(self, value):
+        return None if value is None else millisecondsDate(value)
 
     class Meta:
         model = models.Descent

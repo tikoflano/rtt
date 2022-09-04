@@ -4,10 +4,10 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'dateDiff',
 })
 export class DateDiffPipe implements PipeTransform {
-  transform(value: Date | null, ...args: unknown[]): number | null {
-    if (!value) return null;
+  transform(value: Date | undefined, later_date: Date = new Date()): number {
+    if (!value) return 0;
 
-    const diff = new Date().getTime() - value.getTime();
+    const diff = later_date.getTime() - value.getTime();
 
     return Math.floor(diff / 10);
   }

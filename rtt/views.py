@@ -4,7 +4,7 @@ from django.http import JsonResponse
 
 
 def server_datetime(request):
-    return JsonResponse({'datetime': timezone.localtime()})
+    return JsonResponse({'datetime': timezone.now()})
 
 
 def frontend(request):

@@ -16,11 +16,12 @@ import { RaceComponent } from './views/race/race.component';
 import { TimerComponent } from './components/timer/timer.component';
 import { ToolBarComponent } from './components/tool-bar/tool-bar.component';
 import { DurationPipe } from './pipes/duration.pipe';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { ServerTimeServiceService } from './services/server-time.service';
 import { DescentService } from './services/descent.service';
 import { ClientDatePipe } from './pipes/client-date.pipe';
 import { DateDiffPipe } from './pipes/date-diff.pipe';
+import { ToDatePipe } from './pipes/to-date.pipe';
 
 @NgModule({
   declarations: [
@@ -31,10 +32,15 @@ import { DateDiffPipe } from './pipes/date-diff.pipe';
     DurationPipe,
     ClientDatePipe,
     DateDiffPipe,
+    ToDatePipe,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    HttpClientXsrfModule.withOptions({
+      cookieName: 'csrftoken',
+      headerName: 'X-CSRFTOKEN',
+    }),
     AppRoutingModule,
     MatSliderModule,
     MatToolbarModule,

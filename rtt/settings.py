@@ -117,7 +117,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -169,3 +169,6 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '0.1.0',
     'SERVE_INCLUDE_SCHEMA': False,
 }
+
+CSRF_USE_SESSIONS = False
+CSRF_COOKIE_HTTPONLY = False  # this is the default, and should be kept this way
