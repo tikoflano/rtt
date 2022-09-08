@@ -1,0 +1,2 @@
+SSE_CHANNEL_DESCENTS="descents"
+SSE_TYPE_MESSAGE="message"

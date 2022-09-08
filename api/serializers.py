@@ -4,6 +4,7 @@ import api.models as models
 from django.shortcuts import get_object_or_404
 from api.utils import millisecondsDate
 
+
 class PilotSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = models.Pilot
@@ -39,11 +40,8 @@ class DescentSerializer(FlexFieldsModelSerializer):
         return repr
 
     def validate(self, data):
-        race_id = self.context["request"].parser_context['kwargs']['race_id']
-        race = get_object_or_404(models.Race, pk=race_id)
-        data["race"] = race
-
-        start = data.get("start") or self.instance.start
+        start = data.get(
+            "start") or self.instance.start if self.instance else None
         end = data.get("end")
 
         if end is not None and end and not start:

@@ -8,3 +8,5 @@ export interface Descent {
   end: string | null;
   readonly duration: number;
 }
+
+export type PartialDescent = Partial<Descent> & Pick<Descent, 'id'>;

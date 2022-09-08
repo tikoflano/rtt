@@ -1,19 +1,37 @@
 <div class="timer">
   <div>{{ (displayTimer$ | async) ?? 0 | duration }}</div>
 
-  <button *ngIf="!(startTimer$ | async) && !(stopTimer$ | async)" (click)="start()" mat-icon-button>
-    <mat-icon>play_arrow</mat-icon>
-  </button>
+  <ng-container *ngIf="!(stopTimer$ | async)!.trigger">
+    <button
+      *ngIf="!(startTimer$ | async)!.trigger"
+      (click)="start()"
+      mat-icon-button
+    >
+      <mat-icon>play_arrow</mat-icon>
+    </button>
 
-  <button *ngIf="(pauseTimer$ | async) && !(stopTimer$ | async)" (click)="continue()" mat-icon-button>
-    <mat-icon>update</mat-icon>
-  </button>
+    <button
+      *ngIf="(pauseTimer$ | async)!.trigger"
+      (click)="continue()"
+      mat-icon-button
+    >
+      <mat-icon>update</mat-icon>
+    </button>
 
-  <button *ngIf="(pauseTimer$ | async) && !(stopTimer$ | async)" (click)="stop()" mat-icon-button>
-    <mat-icon>stop</mat-icon>
-  </button>
+    <button
+      *ngIf="(pauseTimer$ | async)!.trigger"
+      (click)="stop()"
+      mat-icon-button
+    >
+      <mat-icon>stop</mat-icon>
+    </button>
 
-  <button *ngIf="(startTimer$ | async) && !(pauseTimer$ | async)" (click)="pause()" mat-icon-button>
-    <mat-icon>pause</mat-icon>
-  </button>
+    <button
+      *ngIf="(startTimer$ | async)!.trigger && !(pauseTimer$ | async)!.trigger"
+      (click)="pause()"
+      mat-icon-button
+    >
+      <mat-icon>pause</mat-icon>
+    </button>
+  </ng-container>
 </div>

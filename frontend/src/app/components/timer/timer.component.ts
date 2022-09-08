@@ -20,9 +20,24 @@ import {
   filter,
   withLatestFrom,
   skipUntil,
-  takeUntil,
+  tap,
   share,
 } from 'rxjs/operators';
+
+interface TimerAction {
+  trigger: boolean;
+  emit: boolean;
+}
+
+const TRIGGER_EMIT_TIMER_ACTION: TimerAction = {
+  trigger: true,
+  emit: true,
+};
+
+const NOTRIGGER_NOEMIT_TIMER_ACTION: TimerAction = {
+  trigger: false,
+  emit: false,
+};
 
 @Component({
   selector: 'app-timer',
@@ -36,9 +51,15 @@ export class TimerComponent implements OnInit, OnDestroy {
   public displayTimer$: Observable<number> = new Observable();
   public offset$: BehaviorSubject<number> = new BehaviorSubject(0);
 
-  public startTimer$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  public pauseTimer$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  public stopTimer$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public startTimer$: BehaviorSubject<TimerAction> = new BehaviorSubject(
+    NOTRIGGER_NOEMIT_TIMER_ACTION
+  );
+  public pauseTimer$: BehaviorSubject<TimerAction> = new BehaviorSubject(
+    NOTRIGGER_NOEMIT_TIMER_ACTION
+  );
+  public stopTimer$: BehaviorSubject<TimerAction> = new BehaviorSubject(
+    NOTRIGGER_NOEMIT_TIMER_ACTION
+  );
 
   @Input() set offset(value: number | null) {
     if (!value) return;
@@ -48,13 +69,19 @@ export class TimerComponent implements OnInit, OnDestroy {
 
   @Input('start') set autoStart(value: boolean) {
     if (value) {
-      this.startTimer$.next(true);
+      this.startTimer$.next({
+        trigger: value,
+        emit: false,
+      });
     }
   }
 
   @Input('stop') set autoStop(value: boolean) {
     if (value) {
-      this.stopTimer$.next(true);
+      this.stopTimer$.next({
+        trigger: value,
+        emit: false,
+      });
     }
   }
 
@@ -67,7 +94,10 @@ export class TimerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const firstMs$ = this.timerService
       .getTimer()
-      .pipe(skipUntil(this.startTimer$.pipe(filter((val) => val))), first());
+      .pipe(
+        skipUntil(this.startTimer$.pipe(filter((val) => val.trigger))),
+        first()
+      );
 
     this.internalTimer$ = combineLatest([
       firstMs$,
@@ -75,32 +105,49 @@ export class TimerComponent implements OnInit, OnDestroy {
       this.offset$,
     ]).pipe(
       withLatestFrom(this.pauseTimer$, this.stopTimer$),
-      filter(([_, paused, stopped]) => !paused && !stopped),
+      filter(
+        ([_, { trigger: paused }, { trigger: stopped }]) => !paused && !stopped
+      ),
       map(([[start, timer, offset]]) => timer - start + offset)
     );
 
+    const startEventSub = this.startTimer$.subscribe(({ emit }) => {
+      if (emit) {
+        this.started.emit();
+      }
+    });
+
+    this.subs.add(startEventSub);
+
     const pauseEventSub = this.pauseTimer$
       .pipe(
-        filter((paused) => paused),
+        filter(({ trigger: paused }) => paused),
         withLatestFrom(this.internalTimer$)
       )
-      .subscribe(([_, timer]) => this.paused.emit(timer * 10));
+      .subscribe(([{ emit }, timer]) => {
+        if (emit) {
+          this.paused.emit(timer * 10);
+        }
+      });
 
     this.subs.add(pauseEventSub);
 
     const stopEventSub = this.stopTimer$
       .pipe(
-        filter((stopped) => stopped),
+        filter(({ trigger: stopped }) => stopped),
         withLatestFrom(this.internalTimer$)
       )
-      .subscribe(([_, timer]) => this.stopped.emit(timer * 10));
+      .subscribe(([{ emit }, timer]) => {
+        if (emit) {
+          this.stopped.emit(timer * 10);
+        }
+      });
 
     this.subs.add(stopEventSub);
 
-    this.displayTimer$ = merge(
-      this.offset$.pipe(takeUntil(this.internalTimer$)),
-      this.internalTimer$
-    ).pipe(share());
+    this.displayTimer$ = merge(this.offset$, this.internalTimer$).pipe(share());
+
+    this.offset$.pipe(tap(console.log));
   }
 
   ngOnDestroy(): void {
@@ -108,19 +155,18 @@ export class TimerComponent implements OnInit, OnDestroy {
   }
 
   public start() {
-    this.startTimer$.next(true);
-    this.started.emit();
+    this.startTimer$.next(TRIGGER_EMIT_TIMER_ACTION);
   }
 
   public pause() {
-    this.pauseTimer$.next(true);
+    this.pauseTimer$.next(TRIGGER_EMIT_TIMER_ACTION);
   }
 
   public continue() {
-    this.pauseTimer$.next(false);
+    this.pauseTimer$.next(NOTRIGGER_NOEMIT_TIMER_ACTION);
   }
 
   public stop() {
-    this.stopTimer$.next(true);
+    this.stopTimer$.next(TRIGGER_EMIT_TIMER_ACTION);
   }
 }

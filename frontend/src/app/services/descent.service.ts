@@ -1,15 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Descent } from 'app/models/descent.model';
+import { Injectable, NgZone } from '@angular/core';
+import { Descent, PartialDescent } from 'app/models/descent.model';
 import { Race } from 'app/models/race.model';
-import {
-  Observable,
-  shareReplay,
-  Subject,
-  finalize,
-  BehaviorSubject,
-  ReplaySubject,
-} from 'rxjs';
+import { Observable, Subject, BehaviorSubject, combineLatest } from 'rxjs';
+import { map, startWith, finalize, shareReplay } from 'rxjs/operators';
+import { ServerEventsService } from './server-events.service';
 
 @Injectable()
 export class DescentService {
@@ -22,7 +17,31 @@ export class DescentService {
   private patchLoading$: BehaviorSubject<boolean> = new BehaviorSubject(true);
   private patchError$: Subject<string> = new Subject();
 
-  constructor(private http: HttpClient) {}
+  private expands: string[] = ['race_pilot', 'track'];
+  private omits: string[] = ['race_pilot.descents'];
+  private fields: string[] = [];
+
+  constructor(
+    private http: HttpClient,
+    private serverEventsService: ServerEventsService,
+    private zone: NgZone
+  ) {
+    this.serverEventsService
+      .getServerEvents<PartialDescent>()
+      .subscribe((partialDescent) => {
+        this.zone.run(() => {
+          const descents = this.descents$.getValue();
+          let oldDescentIndex = descents.findIndex(
+            (el) => el.id === partialDescent.id
+          );
+          descents[oldDescentIndex] = Object.assign(
+            { ...descents[oldDescentIndex] },
+            partialDescent
+          );
+          this.descents$.next(descents);
+        });
+      });
+  }
 
   public getDescents(): Observable<Descent[]> {
     return this.descents$.asObservable();
@@ -32,9 +51,7 @@ export class DescentService {
     this.getLoading$.next(true);
 
     const obs$ = this.http
-      .get<Descent[]>(
-        `/api/races/${race_id}/descents/?expand=race_pilot&omit=race_pilot.descents`
-      )
+      .get<Descent[]>(this.addQueryParams(`/api/races/${race_id}/descents/`))
       .pipe(
         finalize(() => this.getLoading$.next(false)),
         shareReplay(1)
@@ -56,13 +73,10 @@ export class DescentService {
     return this.getError$.asObservable();
   }
 
-  public updateDescent(
-    raceId: Race['id'],
-    descent: Partial<Descent> & Pick<Descent, 'id'>
-  ) {
+  public updateDescent(raceId: Race['id'], descent: PartialDescent) {
     const obs$ = this.http
       .patch<Descent>(
-        `/api/races/${raceId}/descents/${descent.id}/?expand=race_pilot&omit=race_pilot.descents`,
+        this.addQueryParams(`/api/races/${raceId}/descents/${descent.id}/`),
         descent
       )
       .pipe(
@@ -86,5 +100,17 @@ export class DescentService {
 
   public patchError(): Observable<string> {
     return this.patchError$.asObservable();
+  }
+
+  private addQueryParams(url: string): string {
+    const expands = this.expands.length
+      ? `expand=${this.expands.join(',')}`
+      : '';
+    const omits = this.omits.length ? `omit=${this.omits.join(',')}` : '';
+    const fields = this.fields.length ? `fields=${this.fields.join(',')}` : '';
+
+    const queryParams = [expands, omits, fields].filter(Boolean);
+
+    return `${url}?${queryParams.join('&')}`;
   }
 }

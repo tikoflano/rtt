@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./race.component.scss'],
 })
 export class RaceComponent implements OnInit {
-  public readonly displayedColumns = ['number', 'name', 'timer'];
+  public readonly displayedColumns = ['number', 'name', 'track', 'timer'];
 
   public descents$: Observable<Descent[]>;
   public loading$: Observable<boolean>;

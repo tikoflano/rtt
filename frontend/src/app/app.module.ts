@@ -21,7 +21,6 @@ import { ServerTimeServiceService } from './services/server-time.service';
 import { DescentService } from './services/descent.service';
 import { ClientDatePipe } from './pipes/client-date.pipe';
 import { DateDiffPipe } from './pipes/date-diff.pipe';
-import { ToDatePipe } from './pipes/to-date.pipe';
 
 @NgModule({
   declarations: [
@@ -32,7 +31,6 @@ import { ToDatePipe } from './pipes/to-date.pipe';
     DurationPipe,
     ClientDatePipe,
     DateDiffPipe,
-    ToDatePipe,
   ],
   imports: [
     BrowserModule,
@@ -61,6 +59,7 @@ import { ToDatePipe } from './pipes/to-date.pipe';
     },
     ServerTimeServiceService,
     DescentService,
+    ClientDatePipe,
   ],
   bootstrap: [AppComponent],
 })
