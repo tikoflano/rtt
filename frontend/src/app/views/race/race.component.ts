@@ -27,7 +27,14 @@ const TIMER_STATUS_CHANGES: Record<TimerEvent, DescentStatus> = {
   styleUrls: ['./race.component.scss'],
 })
 export class RaceComponent implements OnInit {
-  public readonly displayedColumns = ['number', 'name', 'track', 'timer'];
+  public readonly displayedColumns = [
+    'number',
+    'name',
+    'track',
+    'timer',
+    'actions',
+  ];
+  public DescentStatus = DescentStatus;
 
   public descents$: Observable<Descent[]>;
   public loading$: Observable<boolean>;
@@ -89,5 +96,25 @@ export class RaceComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+
+  cancelDescent(descent: Descent) {
+    const payload: PartialDescent = {
+      id: descent.id,
+      status: descent.start ? DescentStatus.DNF : DescentStatus.DNS,
+    };
+
+    this.descentService.updateDescent(this.raceId, payload);
+  }
+
+  replayDescent(descent: Descent) {
+    const payload: PartialDescent = {
+      id: descent.id,
+      status: DescentStatus.PENDING,
+      start: null,
+      end: null,
+    };
+
+    this.descentService.updateDescent(this.raceId, payload);
   }
 }

@@ -8,10 +8,11 @@ import { DescentStatus } from 'app/models/descent.model';
 export class DescentStatusToTimerStatusPipe implements PipeTransform {
   transform(value: DescentStatus): TimerStatus {
     const map: Record<DescentStatus, TimerStatus> = {
-      [DescentStatus.DNS]: TimerStatus.NONE,
+      [DescentStatus.PENDING]: TimerStatus.NONE,
       [DescentStatus.RUNNING]: TimerStatus.RUNNING,
       [DescentStatus.PAUSED]: TimerStatus.PAUSED,
       [DescentStatus.FINISHED]: TimerStatus.STOPPED,
+      [DescentStatus.DNS]: TimerStatus.STOPPED,
       [DescentStatus.DNF]: TimerStatus.STOPPED,
     };
 

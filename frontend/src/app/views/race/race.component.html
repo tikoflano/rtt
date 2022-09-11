@@ -38,16 +38,58 @@
         <ng-container matColumnDef="timer">
           <th mat-header-cell *matHeaderCellDef>Timer</th>
           <td mat-cell *matCellDef="let descent">
-            <app-timer
-              [status]="descent.status | descentStatusToTimerStatus"
-              [offset]="
-                descent.start
-                  | clientDate
-                  | async
-                  | dateDiff: (descent.end | clientDate | async)
+            <span
+              *ngIf="
+                [DescentStatus.DNS, DescentStatus.DNF].includes(descent.status);
+                else timer
               "
-              (action)="onTimerAction(descent, $event)"
-            ></app-timer>
+              >{{ descent.status | uppercase }}</span
+            >
+            <ng-template #timer>
+              <app-timer
+                [status]="descent.status | descentStatusToTimerStatus"
+                [offset]="
+                  descent.start
+                    | clientDate
+                    | async
+                    | dateDiff: (descent.end | clientDate | async)
+                "
+                (action)="onTimerAction(descent, $event)"
+              ></app-timer>
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <!-- Actions colum -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let descent">
+            <button
+              *ngIf="
+                [
+                  DescentStatus.PENDING,
+                  DescentStatus.RUNNING,
+                  DescentStatus.PAUSED
+                ].includes(descent.status)
+              "
+              (click)="cancelDescent(descent)"
+              mat-icon-button
+            >
+              <mat-icon>cancel</mat-icon>
+            </button>
+            <button
+              *ngIf="
+                [
+                  DescentStatus.FINISHED,
+                  DescentStatus.DNS,
+                  DescentStatus.DNF
+                ].includes(descent.status)
+              "
+              (click)="replayDescent(descent)"
+              mat-icon-button
+            >
+              <mat-icon>replay</mat-icon>
+            </button>
           </td>
         </ng-container>
 

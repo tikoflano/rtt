@@ -71,20 +71,23 @@ class RacePilot(models.Model):
 
 
 class Descent(models.Model, ModelDiffMixin):
-    class DescentStatus(models.IntegerChoices):
-        DNS = 1
-        RUNNING = 2
-        PAUSED = 3
-        FINISHED = 4
-        DNF = 5
+    class DescentStatus(models.TextChoices):
+        PENDING = "pending"
+        RUNNING = "running"
+        PAUSED = "paused"
+        FINISHED = "finished"
+        DNS = "dns"
+        DNF = "dnf"
 
     race_pilot = models.ForeignKey(
         RacePilot, related_name="descents", on_delete=models.CASCADE)
     track = models.ForeignKey(Track, on_delete=models.CASCADE)
     start = models.DateTimeField(null=True)
     end = models.DateTimeField(null=True)
-    status = models.IntegerField(
-        choices=DescentStatus.choices, default=DescentStatus.DNS)
+    status = models.CharField(
+        max_length=20,
+        choices=DescentStatus.choices,
+        default=DescentStatus.PENDING)
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)

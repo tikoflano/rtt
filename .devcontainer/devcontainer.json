@@ -7,14 +7,15 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-python.python",
-        "ms-python.vscode-pylance",
-        "batisteo.vscode-django",
-        "esbenp.prettier-vscode",
-        "bradlc.vscode-tailwindcss",
-        "donjayamanne.githistory",
-        "Angular.ng-template"
-      ]
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"batisteo.vscode-django",
+		"esbenp.prettier-vscode",
+		"bradlc.vscode-tailwindcss",
+		"donjayamanne.githistory",
+		"Angular.ng-template",
+		"chrisbibby.hide-node-modules"
+	]
     }
   }
 }

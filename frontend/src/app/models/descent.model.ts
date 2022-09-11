@@ -13,9 +13,10 @@ export interface Descent {
 export type PartialDescent = Partial<Descent> & Pick<Descent, 'id'>;
 
 export enum DescentStatus {
-  DNS = 1,
-  RUNNING,
-  PAUSED,
-  FINISHED,
-  DNF,
+  PENDING = 'pending',
+  RUNNING = 'running',
+  PAUSED = 'paused',
+  FINISHED = 'finished',
+  DNS = 'dns',
+  DNF = 'dnf',
 }

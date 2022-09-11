@@ -7,7 +7,6 @@ mat-card {
   }
 }
 
-
 table {
   width: 100%;
 
@@ -16,5 +15,8 @@ table {
   }
   .cdk-column-timer {
     width: 160px;
+  }
+  .cdk-column-actions {
+    width: 0;
   }
 }
