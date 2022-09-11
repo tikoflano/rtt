@@ -1,2 +1,7 @@
 <app-tool-bar></app-tool-bar>
-<router-outlet></router-outlet>
+
+<mat-spinner *ngIf="loadingTimer$ | async; else router"></mat-spinner>
+
+<ng-template #router>
+  <router-outlet></router-outlet>
+</ng-template>

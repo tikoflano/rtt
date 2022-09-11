@@ -1,7 +1,5 @@
 from django.db import models
 from django.core.validators import MinValueValidator
-from django_eventstream import send_event
-from api.constants import SSE_CHANNEL_DESCENTS, SSE_TYPE_MESSAGE
 from api.utils import ModelDiffMixin
 
 
@@ -73,32 +71,22 @@ class RacePilot(models.Model):
 
 
 class Descent(models.Model, ModelDiffMixin):
+    class DescentStatus(models.IntegerChoices):
+        DNS = 1
+        RUNNING = 2
+        PAUSED = 3
+        FINISHED = 4
+        DNF = 5
+
     race_pilot = models.ForeignKey(
         RacePilot, related_name="descents", on_delete=models.CASCADE)
     track = models.ForeignKey(Track, on_delete=models.CASCADE)
     start = models.DateTimeField(null=True)
     end = models.DateTimeField(null=True)
-
-    def send_event(self, data):
-        data["id"] = self.id
-        send_event(SSE_CHANNEL_DESCENTS, SSE_TYPE_MESSAGE, data)
+    status = models.IntegerField(
+        choices=DescentStatus.choices, default=DescentStatus.DNS)
 
     def save(self, *args, **kwargs):
-        start_diff = self.get_field_diff("start")
-        end_diff = self.get_field_diff("end")
-
-        if start_diff is not None:
-            self.send_event(
-                {'start': None
-                 if start_diff[1] is None else start_diff[1].strftime(
-                     '%Y-%m-%dT%H:%M:%S.%f')[: -4] + "Z"})
-
-        if end_diff is not None:
-            self.send_event(
-                {'end': None
-                 if end_diff[1] is None else end_diff[1].strftime(
-                     '%Y-%m-%dT%H:%M:%S.%f')[: -4] + "Z"})
-
         return super().save(*args, **kwargs)
 
     @property

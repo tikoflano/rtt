@@ -4,7 +4,8 @@ from django.http import JsonResponse
 
 
 def server_datetime(request):
-    return JsonResponse({'datetime': timezone.now()})
+    return JsonResponse({'datetime': timezone.now().strftime(
+        '%Y-%m-%dT%H:%M:%S.%f')[: -4] + "Z"})
 
 
 def frontend(request):

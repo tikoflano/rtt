@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
 import api.models as models
-from django.shortcuts import get_object_or_404
 from api.utils import millisecondsDate
 
 
@@ -60,7 +59,8 @@ class DescentSerializer(FlexFieldsModelSerializer):
 
     class Meta:
         model = models.Descent
-        fields = ['id', 'race_pilot', 'track', 'start', 'end', 'duration']
+        fields = ['id', 'race_pilot', 'track',
+                  'start', 'end', 'status', 'duration']
         expandable_fields = {
             'race_pilot': ('api.RacePilotSerializer', {'many': False}),
             'track': TrackSerializer
@@ -85,3 +85,7 @@ class RacePilotSerializer(FlexFieldsModelSerializer):
         model = models.RacePilot
         fields = ['id', 'first_name', 'last_name', 'descents', 'number']
         expandable_fields = {'descents': (DescentSerializer, {'many': True})}
+
+
+class DescentEventSerializer(serializers.Serializer):
+    date = serializers.DateTimeField()

@@ -1,8 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { Descent } from 'app/models/descent.model';
+import {
+  TimerEvent,
+  TimerStatus,
+  TimerStatusChangedEventPayload,
+} from 'app/components/timer/timer.component';
+import {
+  Descent,
+  DescentStatus,
+  PartialDescent,
+} from 'app/models/descent.model';
 import { DescentService } from 'app/services/descent.service';
 import { ServerTimeServiceService } from 'app/services/server-time.service';
 import { Observable } from 'rxjs';
+import { first, switchMap } from 'rxjs/operators';
+
+const TIMER_STATUS_CHANGES: Record<TimerEvent, DescentStatus> = {
+  [TimerEvent.START]: DescentStatus.RUNNING,
+  [TimerEvent.PAUSE]: DescentStatus.PAUSED,
+  [TimerEvent.RESUME]: DescentStatus.RUNNING,
+  [TimerEvent.STOP]: DescentStatus.FINISHED,
+};
 
 @Component({
   selector: 'app-race',
@@ -39,19 +56,38 @@ export class RaceComponent implements OnInit {
     return `${descent.id}`;
   }
 
-  sendStartTime(descent: Descent): void {
-    this.descentService.updateDescent(this.raceId, {
-      id: descent.id,
-      start: new Date().toISOString(),
-    });
-  }
+  onTimerAction(
+    descent: Descent,
+    $event: TimerStatusChangedEventPayload
+  ): void {
+    this.serverOffset$
+      .pipe(
+        first(),
+        switchMap((offset) => {
+          const payload: PartialDescent = {
+            id: descent.id,
+            status: TIMER_STATUS_CHANGES[$event.event],
+          };
 
-  sendEndTime(descent: Descent, duration: number): void {
-    const start = new Date(descent.start as string);
+          switch ($event.event) {
+            case TimerEvent.START:
+              payload.start = new Date(
+                $event.timestamp.getTime() + offset
+              ).toISOString();
+              break;
+            case TimerEvent.RESUME:
+              payload.end = null;
+              break;
+            case TimerEvent.PAUSE:
+              payload.end = new Date(
+                $event.timestamp.getTime() + offset
+              ).toISOString();
+              break;
+          }
 
-    this.descentService.updateDescent(this.raceId, {
-      id: descent.id,
-      end: new Date(start.getTime() + duration).toISOString(),
-    });
+          return this.descentService.updateDescent(this.raceId, payload);
+        })
+      )
+      .subscribe();
   }
 }

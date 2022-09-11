@@ -17,7 +17,7 @@ export class ClientDatePipe implements PipeTransform {
 
     return this.serverTimeServiceService.getServerOffset().pipe(
       take(1),
-      map((offset) => new Date((value as Date).getTime() + offset))
+      map((offset) => new Date((value as Date).getTime() - offset))
     );
   }
 }

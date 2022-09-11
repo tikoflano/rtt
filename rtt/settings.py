@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-wayx+&34y$@_k#4lr9hyd)9#tw@b3^2jkj9pji%jc*-v-ocgx#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [".ngrok.io", "localhost"]
 
 
 # Application definition
@@ -49,11 +49,13 @@ INSTALLED_APPS = [
     'api',
     'django_extensions',
     'drf_spectacular',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -173,3 +175,8 @@ SPECTACULAR_SETTINGS = {
 }
 
 EVENTSTREAM_STORAGE_CLASS = 'django_eventstream.storage.DjangoModelStorage'
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = ["http://localhost", "https://*.ngrok.io"]

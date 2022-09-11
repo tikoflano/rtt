@@ -1,42 +1,39 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TimerService } from 'app/services/timer.service';
-import {
-  Observable,
-  BehaviorSubject,
-  Subscription,
-  combineLatest,
-  merge,
-} from 'rxjs';
+import { Observable, BehaviorSubject, combineLatest, merge } from 'rxjs';
 import {
   first,
   map,
   filter,
   withLatestFrom,
   skipUntil,
-  tap,
-  share,
+  shareReplay,
 } from 'rxjs/operators';
 
-interface TimerAction {
-  trigger: boolean;
-  emit: boolean;
+export interface TimerStatusChangedEventPayload {
+  event: TimerEvent;
+  timestamp: Date;
 }
 
-const TRIGGER_EMIT_TIMER_ACTION: TimerAction = {
-  trigger: true,
-  emit: true,
-};
+export enum TimerStatus {
+  NONE = 1,
+  RUNNING,
+  PAUSED,
+  STOPPED,
+}
 
-const NOTRIGGER_NOEMIT_TIMER_ACTION: TimerAction = {
-  trigger: false,
-  emit: false,
+export enum TimerEvent {
+  START = 1,
+  PAUSE,
+  RESUME,
+  STOP,
+}
+
+const TIMER_STATUS_CHANGES: Record<TimerEvent, TimerStatus> = {
+  [TimerEvent.START]: TimerStatus.RUNNING,
+  [TimerEvent.PAUSE]: TimerStatus.PAUSED,
+  [TimerEvent.RESUME]: TimerStatus.RUNNING,
+  [TimerEvent.STOP]: TimerStatus.STOPPED,
 };
 
 @Component({
@@ -44,58 +41,43 @@ const NOTRIGGER_NOEMIT_TIMER_ACTION: TimerAction = {
   templateUrl: './timer.component.html',
   styleUrls: ['./timer.component.scss'],
 })
-export class TimerComponent implements OnInit, OnDestroy {
-  private subs: Subscription = new Subscription();
+export class TimerComponent implements OnInit {
+  public TimerStatus = TimerStatus;
+  public TimerEvent = TimerEvent;
 
   public internalTimer$: Observable<number> = new Observable();
   public displayTimer$: Observable<number> = new Observable();
   public offset$: BehaviorSubject<number> = new BehaviorSubject(0);
+  public status$ = new BehaviorSubject<TimerStatus>(TimerStatus.NONE);
 
-  public startTimer$: BehaviorSubject<TimerAction> = new BehaviorSubject(
-    NOTRIGGER_NOEMIT_TIMER_ACTION
-  );
-  public pauseTimer$: BehaviorSubject<TimerAction> = new BehaviorSubject(
-    NOTRIGGER_NOEMIT_TIMER_ACTION
-  );
-  public stopTimer$: BehaviorSubject<TimerAction> = new BehaviorSubject(
-    NOTRIGGER_NOEMIT_TIMER_ACTION
-  );
+  @Input() set status(status: TimerStatus) {
+    this.status$.next(status);
+  }
 
   @Input() set offset(value: number | null) {
-    if (!value) return;
-
-    this.offset$.next(value);
+    this.offset$.next(value ?? 0);
+    this.resetTimer();
   }
 
-  @Input('start') set autoStart(value: boolean) {
-    if (value) {
-      this.startTimer$.next({
-        trigger: value,
-        emit: false,
-      });
-    }
-  }
-
-  @Input('stop') set autoStop(value: boolean) {
-    if (value) {
-      this.stopTimer$.next({
-        trigger: value,
-        emit: false,
-      });
-    }
-  }
-
-  @Output() started = new EventEmitter<null>();
-  @Output() paused = new EventEmitter<number>();
-  @Output() stopped = new EventEmitter<number>();
+  @Output() action = new EventEmitter<TimerStatusChangedEventPayload>();
 
   constructor(private timerService: TimerService) {}
 
   ngOnInit(): void {
+    this.resetTimer();
+  }
+
+  private resetTimer() {
     const firstMs$ = this.timerService
       .getTimer()
       .pipe(
-        skipUntil(this.startTimer$.pipe(filter((val) => val.trigger))),
+        skipUntil(
+          this.status$.pipe(
+            filter((status) =>
+              [TimerStatus.RUNNING, TimerStatus.PAUSED].includes(status)
+            )
+          )
+        ),
         first()
       );
 
@@ -104,69 +86,18 @@ export class TimerComponent implements OnInit, OnDestroy {
       this.timerService.getTimer(),
       this.offset$,
     ]).pipe(
-      withLatestFrom(this.pauseTimer$, this.stopTimer$),
-      filter(
-        ([_, { trigger: paused }, { trigger: stopped }]) => !paused && !stopped
-      ),
-      map(([[start, timer, offset]]) => timer - start + offset)
+      withLatestFrom(this.status$),
+      filter(([_, status]) => status === TimerStatus.RUNNING),
+      map(([[startingMs, timer, offset]]) => timer - startingMs + offset)
     );
 
-    const startEventSub = this.startTimer$.subscribe(({ emit }) => {
-      if (emit) {
-        this.started.emit();
-      }
-    });
-
-    this.subs.add(startEventSub);
-
-    const pauseEventSub = this.pauseTimer$
-      .pipe(
-        filter(({ trigger: paused }) => paused),
-        withLatestFrom(this.internalTimer$)
-      )
-      .subscribe(([{ emit }, timer]) => {
-        if (emit) {
-          this.paused.emit(timer * 10);
-        }
-      });
-
-    this.subs.add(pauseEventSub);
-
-    const stopEventSub = this.stopTimer$
-      .pipe(
-        filter(({ trigger: stopped }) => stopped),
-        withLatestFrom(this.internalTimer$)
-      )
-      .subscribe(([{ emit }, timer]) => {
-        if (emit) {
-          this.stopped.emit(timer * 10);
-        }
-      });
-
-    this.subs.add(stopEventSub);
-
-    this.displayTimer$ = merge(this.offset$, this.internalTimer$).pipe(share());
-
-    this.offset$.pipe(tap(console.log));
+    this.displayTimer$ = merge(this.offset$, this.internalTimer$).pipe(
+      shareReplay(1)
+    );
   }
 
-  ngOnDestroy(): void {
-    this.subs.unsubscribe();
-  }
-
-  public start() {
-    this.startTimer$.next(TRIGGER_EMIT_TIMER_ACTION);
-  }
-
-  public pause() {
-    this.pauseTimer$.next(TRIGGER_EMIT_TIMER_ACTION);
-  }
-
-  public continue() {
-    this.pauseTimer$.next(NOTRIGGER_NOEMIT_TIMER_ACTION);
-  }
-
-  public stop() {
-    this.stopTimer$.next(TRIGGER_EMIT_TIMER_ACTION);
+  public triggerEvent(event: TimerEvent) {
+    this.status$.next(TIMER_STATUS_CHANGES[event]);
+    this.action.emit({ event, timestamp: new Date() });
   }
 }

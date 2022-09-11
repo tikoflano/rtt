@@ -6,7 +6,16 @@ export interface Descent {
   track: string;
   start: string | null;
   end: string | null;
+  status: DescentStatus;
   readonly duration: number;
 }
 
 export type PartialDescent = Partial<Descent> & Pick<Descent, 'id'>;
+
+export enum DescentStatus {
+  DNS = 1,
+  RUNNING,
+  PAUSED,
+  FINISHED,
+  DNF,
+}

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ServerTimeServiceService } from 'app/services/server-time.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-tool-bar',
@@ -6,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./tool-bar.component.scss'],
 })
 export class ToolBarComponent implements OnInit {
-  constructor() {}
+  public offset$: Observable<number>;
 
-  ngOnInit(): void {}
+  constructor(private serverTimeServiceService: ServerTimeServiceService) {}
+
+  ngOnInit(): void {
+    this.offset$ = this.serverTimeServiceService.getServerOffset();
+  }
 }

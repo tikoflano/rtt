@@ -5,11 +5,8 @@
     </button>
     <span>Race Time Tracker</span>
     <span class="spacer"></span>
-    <button mat-icon-button>
-      <mat-icon>favorite</mat-icon>
-    </button>
-    <button mat-icon-button>
-      <mat-icon>share</mat-icon>
-    </button>
+    <span *ngIf="offset$ | async as offset"
+      >Server time offset: {{ offset }}ms</span
+    >
   </mat-toolbar>
 </p>
