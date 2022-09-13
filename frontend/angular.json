@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-builders/custom-webpack:browser",
           "options": {
-            "deployUrl": "static/frontend/",
+            "deployUrl": "/static/frontend/",
             "outputPath": "dist/frontend",
             "index": "",
             "main": "src/main.ts",

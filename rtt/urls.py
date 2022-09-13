@@ -34,7 +34,7 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    re_path(r'^.*$', views.frontend),
+    re_path(r'^.*/$', views.frontend),
 ]
 
 websocket_urlpatterns = [
