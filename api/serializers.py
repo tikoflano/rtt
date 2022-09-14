@@ -2,6 +2,13 @@ from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
 import api.models as models
 from api.utils import millisecondsDate
+from django.contrib.auth.models import User
+
+
+class UserSerializer(FlexFieldsModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
 
 
 class PilotSerializer(FlexFieldsModelSerializer):

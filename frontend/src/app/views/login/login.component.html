@@ -1,0 +1,57 @@
+<mat-card>
+  <!-- <mat-card-title>Login</mat-card-title> -->
+  <mat-card-content>
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
+      <p>
+        <mat-form-field appearance="standard">
+          <mat-label>Username</mat-label>
+          <input
+            [(ngModel)]="model.username"
+            #username="ngModel"
+            name="username"
+            matInput
+            tabindex="1"
+            required
+          />
+          <mat-icon matSuffix>person</mat-icon>
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field appearance="standard">
+          <mat-label>Password</mat-label>
+          <input
+            [type]="hide ? 'password' : 'text'"
+            [(ngModel)]="model.password"
+            #password="ngModel"
+            name="password"
+            matInput
+            tabindex="2"
+            required
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="hide = !hide"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide"
+          >
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+        </mat-form-field>
+      </p>
+
+      <div class="button">
+        <button
+          type="submit"
+          mat-raised-button
+          color="primary"
+          tabindex="3"
+          [disabled]="loginForm.invalid"
+        >
+          Login
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

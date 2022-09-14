@@ -27,6 +27,7 @@ urlpatterns = [
 
 urlpatterns += [
     re_path(r'^server_datetime/', views.server_datetime),
+    re_path(r'^logout/', views.do_logout),
 ]
 
 urlpatterns += [

@@ -16,12 +16,25 @@ import { RaceComponent } from './views/race/race.component';
 import { TimerComponent } from './components/timer/timer.component';
 import { ToolBarComponent } from './components/tool-bar/tool-bar.component';
 import { DurationPipe } from './pipes/duration.pipe';
-import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
+import {
+  HttpClientModule,
+  HttpClientXsrfModule,
+  HTTP_INTERCEPTORS,
+} from '@angular/common/http';
 import { ServerTimeServiceService } from './services/server-time.service';
 import { DescentService } from './services/descent.service';
 import { ClientDatePipe } from './pipes/client-date.pipe';
 import { DateDiffPipe } from './pipes/date-diff.pipe';
 import { DescentStatusToTimerStatusPipe } from './pipes/descent-status-to-timer-status.pipe';
+import { NotFoundComponent } from './views/not-found/not-found.component';
+import { LoginComponent } from './views/login/login.component';
+import { Router } from '@angular/router';
+import { AuthInterceptor } from './services/auth.interceptor';
+import { UserService } from './services/user.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -33,6 +46,8 @@ import { DescentStatusToTimerStatusPipe } from './pipes/descent-status-to-timer-
     ClientDatePipe,
     DateDiffPipe,
     DescentStatusToTimerStatusPipe,
+    NotFoundComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,15 +64,32 @@ import { DescentStatusToTimerStatusPipe } from './pipes/descent-status-to-timer-
     MatTableModule,
     MatCardModule,
     MatProgressSpinnerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    BrowserAnimationsModule,
+    FormsModule,
   ],
   providers: [
     // https://stackoverflow.com/a/41614974/974822s
     {
       provide: APP_INITIALIZER,
       multi: true,
-      deps: [ServerTimeServiceService],
-      useFactory: (serverTimeServiceService: ServerTimeServiceService) => () =>
-        null,
+      deps: [UserService, ServerTimeServiceService],
+      useFactory:
+        (
+          userService: UserService,
+          serverTimeServiceService: ServerTimeServiceService
+        ) =>
+        () =>
+          null,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useFactory: function (router: Router) {
+        return new AuthInterceptor(router);
+      },
+      multi: true,
+      deps: [Router],
     },
     ServerTimeServiceService,
     DescentService,

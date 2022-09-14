@@ -1,0 +1,15 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+
+  mat-card {
+    width: fit-content;
+    margin: 0 auto;
+
+    .button {
+      text-align: right;
+    }
+  }
+}

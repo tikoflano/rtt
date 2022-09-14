@@ -8,6 +8,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 app_name = 'api'
 
 router = DefaultRouter()
+router.register(r'users', views.UserViewSet, basename='users')
 router.register(r'pilots', views.PilotViewSet, basename='pilots')
 router.register(r'races', views.RaceViewSet, basename='races')
 
@@ -22,6 +23,9 @@ urlpatterns = [
     re_path(r'schema/$', SpectacularAPIView.as_view(), name='schema'),
     re_path(r'schema/swagger/$', SpectacularSwaggerView.as_view(url_name='api:schema'), name='swagger-ui'),
     re_path(r'schema/redoc/$', SpectacularRedocView.as_view(url_name='api:schema'), name='redoc'),
+    re_path(r'login/', views.do_login, name="login"),
+    re_path(r'logout/', views.do_logout, name="logout"),
     re_path(r'', include(router.urls)),
     re_path(r'', include(races_router.urls)),
+    re_path(r'.*/$', views.not_found)
 ]
