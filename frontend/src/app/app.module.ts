@@ -30,11 +30,11 @@ import { NotFoundComponent } from './views/not-found/not-found.component';
 import { LoginComponent } from './views/login/login.component';
 import { Router } from '@angular/router';
 import { AuthInterceptor } from './services/auth.interceptor';
-import { UserService } from './services/user.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
+import { AutofocusDirective } from './directives/autofocus.directive';
 
 @NgModule({
   declarations: [
@@ -48,6 +48,7 @@ import { FormsModule } from '@angular/forms';
     DescentStatusToTimerStatusPipe,
     NotFoundComponent,
     LoginComponent,
+    AutofocusDirective,
   ],
   imports: [
     BrowserModule,
@@ -74,14 +75,9 @@ import { FormsModule } from '@angular/forms';
     {
       provide: APP_INITIALIZER,
       multi: true,
-      deps: [UserService, ServerTimeServiceService],
-      useFactory:
-        (
-          userService: UserService,
-          serverTimeServiceService: ServerTimeServiceService
-        ) =>
-        () =>
-          null,
+      deps: [ServerTimeServiceService],
+      useFactory: (serverTimeServiceService: ServerTimeServiceService) => () =>
+        null,
     },
     {
       provide: HTTP_INTERCEPTORS,

@@ -1,5 +1,4 @@
 <mat-card>
-  <!-- <mat-card-title>Login</mat-card-title> -->
   <mat-card-content>
     <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
       <p>
@@ -10,6 +9,7 @@
             #username="ngModel"
             name="username"
             matInput
+            matInputAutofocus
             tabindex="1"
             required
           />
@@ -30,6 +30,7 @@
             required
           />
           <button
+            type="button"
             mat-icon-button
             matSuffix
             (click)="hide = !hide"
@@ -41,13 +42,15 @@
         </mat-form-field>
       </p>
 
+      <p class="error" *ngIf="error">{{ error }}</p>
+
       <div class="button">
         <button
           type="submit"
           mat-raised-button
           color="primary"
           tabindex="3"
-          [disabled]="loginForm.invalid"
+          [disabled]="loginForm.invalid || loading"
         >
           Login
         </button>

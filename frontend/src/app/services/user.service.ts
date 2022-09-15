@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { map, share, tap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { share } from 'rxjs/operators';
 import { User } from 'app/models/user.model';
 import { LoginInfo } from 'app/models/login-info.model';
 
@@ -36,8 +36,10 @@ export class UserService {
   }
 
   public login(loginInfo: LoginInfo) {
-    this.http.post('/api/login/', loginInfo).subscribe(() => {
-      // this.isAuthenticated$.next(true);
-    });
+    const obs$ = this.http.post('/api/login/', loginInfo).pipe(share());
+
+    obs$.subscribe(() => this.loadUserInfo());
+
+    return obs$;
   }
 }

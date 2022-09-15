@@ -5,8 +5,8 @@
     </button>
     <span>Race Time Tracker</span>
     <span class="spacer"></span>
-    <span *ngIf="offset$ | async as offset"
-      >Server time offset: {{ offset }}ms</span
-    >
+    <span *ngIf="this.authenticated$ | async">
+      <a mat-button href="/logout">Logout</a>
+    </span>
   </mat-toolbar>
 </p>
