@@ -15,11 +15,13 @@ services:
       - db
       - phpmyadmin
       - redis
+    restart: unless-stopped
 
   db:
     image: mariadb:10.8
     environment:
-      MARIADB_ROOT_PASSWORD: $MARIADB_ROOT_PASSWORD
+      MYSQL_DATABASE: rtt
+      MARIADB_ROOT_PASSWORD: root
     restart: unless-stopped
 
   phpmyadmin:
@@ -29,7 +31,7 @@ services:
     environment:
       - PMA_HOST=db
       - PMA_USER=root
-      - PMA_PASSWORD=$MARIADB_ROOT_PASSWORD
+      - PMA_PASSWORD=root
     restart: unless-stopped
 
   redis:
