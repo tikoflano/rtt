@@ -24,3 +24,7 @@
 
 - Go to frontend/
 - Run `npm start`
+
+### API Docs
+
+Check the API in http://localhost:8080/api/schema/redoc or in http://localhost:9124
