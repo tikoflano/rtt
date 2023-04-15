@@ -37,3 +37,13 @@ services:
   redis:
     image: redis:5
     restart: unless-stopped
+
+  swagger:
+    image: swaggerapi/swagger-ui
+    ports:
+      - 9124:8080
+    environment:
+      - SWAGGER_JSON=/schema.yml
+    volumes:
+      - ./schema.yml:/schema.yml
+    restart: unless-stopped
