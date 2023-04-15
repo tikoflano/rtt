@@ -74,6 +74,15 @@ class DescentSerializer(FlexFieldsModelSerializer):
         }
 
 
+class VenueSerializer(FlexFieldsModelSerializer):
+    tracks = TrackSerializer(read_only=True, many=True,
+                             source='track_set', omit=['venue'])
+
+    class Meta:
+        model = models.Venue
+        fields = ['id', 'name', 'tracks']
+
+
 class RaceSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = models.Race

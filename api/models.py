@@ -55,7 +55,7 @@ class Race(models.Model):
     pilots = models.ManyToManyField(Pilot, through='RacePilot')
 
     def __str__(self):
-        return f"{self.name} - {self.championship} - ({self.venue})"
+        return f"{self.championship} - {self.name} - ({self.venue})"
 
     class Meta:
         db_table = "race"
@@ -65,6 +65,9 @@ class RacePilot(models.Model):
     pilot = models.ForeignKey(Pilot, on_delete=models.CASCADE)
     race = models.ForeignKey(Race, on_delete=models.CASCADE)
     number = models.IntegerField(validators=[MinValueValidator(1)])
+
+    def __str__(self):
+        return f"{self.pilot.first_name} {self.pilot.last_name} ({self.number})"
 
     class Meta:
         db_table = "race_pilot"
@@ -82,8 +85,8 @@ class Descent(models.Model, ModelDiffMixin):
     race_pilot = models.ForeignKey(
         RacePilot, related_name="descents", on_delete=models.CASCADE)
     track = models.ForeignKey(Track, on_delete=models.CASCADE)
-    start = models.DateTimeField(null=True)
-    end = models.DateTimeField(null=True)
+    start = models.DateTimeField(null=True, blank=True)
+    end = models.DateTimeField(null=True, blank=True)
     status = models.CharField(
         max_length=20,
         choices=DescentStatus.choices,
@@ -101,6 +104,9 @@ class Descent(models.Model, ModelDiffMixin):
             return 0
 
         return (self.end - self.start).total_seconds() * 100
+
+    def __str__(self):
+        return f"{self.race_pilot} - {self.track.name}"
 
     class Meta:
         db_table = "descent"

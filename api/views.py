@@ -91,3 +91,8 @@ class RaceDescentViewSet(viewsets.ModelViewSet):
         race_id = self.kwargs.get("race_id")
         race = get_object_or_404(models.Race, pk=race_id)
         return self.queryset.filter(race_pilot__race=race)
+
+
+class VenueViewSet(viewsets.ModelViewSet):
+    queryset = models.Venue.objects.all()
+    serializer_class = serializers.VenueSerializer

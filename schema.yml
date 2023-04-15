@@ -656,6 +656,313 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/users/:
+    get:
+      operationId: users_list
+      tags:
+      - users
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: ''
+    post:
+      operationId: users_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/{id}/:
+    get:
+      operationId: users_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: users_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: users_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: users_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/me/:
+    get:
+      operationId: users_me_retrieve
+      tags:
+      - users
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/venues/:
+    get:
+      operationId: venues_list
+      tags:
+      - venues
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Venue'
+          description: ''
+    post:
+      operationId: venues_create
+      tags:
+      - venues
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Venue'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Venue'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Venue'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Venue'
+          description: ''
+  /api/venues/{id}/:
+    get:
+      operationId: venues_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this venue.
+        required: true
+      tags:
+      - venues
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Venue'
+          description: ''
+    put:
+      operationId: venues_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this venue.
+        required: true
+      tags:
+      - venues
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Venue'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Venue'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Venue'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Venue'
+          description: ''
+    patch:
+      operationId: venues_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this venue.
+        required: true
+      tags:
+      - venues
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVenue'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVenue'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVenue'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Venue'
+          description: ''
+    delete:
+      operationId: venues_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this venue.
+        required: true
+      tags:
+      - venues
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
 components:
   schemas:
     Descent:
@@ -676,11 +983,9 @@ components:
         start:
           type: string
           format: date-time
-          nullable: true
         end:
           type: string
           format: date-time
-          nullable: true
         status:
           $ref: '#/components/schemas/StatusEnum'
         duration:
@@ -709,11 +1014,9 @@ components:
         start:
           type: string
           format: date-time
-          nullable: true
         end:
           type: string
           format: date-time
-          nullable: true
         status:
           $ref: '#/components/schemas/StatusEnum'
         duration:
@@ -777,6 +1080,44 @@ components:
           type: integer
           maximum: 2147483647
           minimum: 1
+    PatchedUser:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+    PatchedVenue:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        tracks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Track'
+          readOnly: true
     Pilot:
       type: object
       description: |-
@@ -859,6 +1200,65 @@ components:
       - dns
       - dnf
       type: string
+    Track:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+      required:
+      - id
+      - name
+    User:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+    Venue:
+      type: object
+      description: |-
+        A ModelSerializer that takes additional arguments for
+        "fields", "omit" and "expand" in order to
+        control which fields are displayed, and whether to replace simple
+        values with complex, nested serializations
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        tracks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Track'
+          readOnly: true
+      required:
+      - id
+      - name
+      - tracks
   securitySchemes:
     basicAuth:
       type: http
