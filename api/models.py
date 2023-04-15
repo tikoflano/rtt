@@ -71,6 +71,7 @@ class RacePilot(models.Model):
 
     class Meta:
         db_table = "race_pilot"
+        unique_together = ('race', 'number')
 
 
 class Descent(models.Model, ModelDiffMixin):
