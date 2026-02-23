@@ -18,7 +18,7 @@ services:
     restart: unless-stopped
 
   db:
-    image: mariadb:10.8
+    image: mariadb:11.8
     environment:
       MYSQL_DATABASE: rtt
       MARIADB_ROOT_PASSWORD: root
@@ -35,7 +35,7 @@ services:
     restart: unless-stopped
 
   redis:
-    image: redis:5
+    image: redis:8
     restart: unless-stopped
 
   swagger:

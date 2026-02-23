@@ -1,7 +1,7 @@
-FROM python:3.10-bullseye
+FROM python:3.12-bookworm
 SHELL ["/bin/bash", "-c"]
 
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - 
+RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - 
 
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
