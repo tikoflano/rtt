@@ -21,16 +21,27 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'frontend', 'src', 'assets'),
 )
 
+# Detect Render deployment (Render sets RENDER=true and DATABASE_URL)
+RENDER = os.environ.get("RENDER", "").lower() == "true"
+DATABASE_URL = os.environ.get("DATABASE_URL")
+REDIS_URL = os.environ.get("REDIS_URL")
+if not REDIS_URL and os.environ.get("REDIS_HOST"):
+    REDIS_PORT = os.environ.get("REDIS_PORT", "6379")
+    REDIS_URL = f"redis://{os.environ['REDIS_HOST']}:{REDIS_PORT}"
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME", "")
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-wayx+&34y$@_k#4lr9hyd)9#tw@b3^2jkj9pji%jc*-v-ocgx#'
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-wayx+&34y$@_k#4lr9hyd)9#tw@b3^2jkj9pji%jc*-v-ocgx#")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "false").lower() == "true" if RENDER or DATABASE_URL else True
 
-ALLOWED_HOSTS = [".ngrok.io", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = [".ngrok.io", "localhost", "127.0.0.1", ".onrender.com"]
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
@@ -54,7 +65,7 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
-MIDDLEWARE = [
+_MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -65,6 +76,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_grip.GripMiddleware',
 ]
+# Add WhiteNoise for production (serves static files when DEBUG=False)
+if RENDER or DATABASE_URL:
+    _MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+MIDDLEWARE = _MIDDLEWARE
 
 ROOT_URLCONF = 'rtt.urls'
 
@@ -90,16 +105,26 @@ WSGI_APPLICATION = 'rtt.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'rtt',
-        'USER': 'rtt',
-        'PASSWORD': 'rtt',
-        'HOST': 'db',
-        'PORT': '5432',
+if DATABASE_URL:
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'rtt',
+            'USER': 'rtt',
+            'PASSWORD': 'rtt',
+            'HOST': 'db',
+            'PORT': '5432',
+        }
+    }
 
 
 # Password validation
@@ -130,6 +155,9 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+if DATABASE_URL or RENDER:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -151,14 +179,25 @@ WEBPACK_LOADER = {
 
 # Channels
 ASGI_APPLICATION = 'rtt.asgi.application'
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('redis', 6379)],
+if REDIS_URL:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {'hosts': [REDIS_URL]},
         },
-    },
-}
+    }
+elif RENDER or DATABASE_URL:
+    # Render without Redis: use in-memory (single instance only)
+    CHANNEL_LAYERS = {
+        'default': {'BACKEND': 'channels.layers.InMemoryChannelLayer'},
+    }
+else:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {'hosts': [('redis', 6379)]},
+        },
+    }
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -181,4 +220,6 @@ EVENTSTREAM_STORAGE_CLASS = 'django_eventstream.storage.DjangoModelStorage'
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost", "https://*.ngrok.io"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost", "https://*.ngrok.io", "https://*.onrender.com"]
+if RENDER_EXTERNAL_HOSTNAME:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{RENDER_EXTERNAL_HOSTNAME}")
