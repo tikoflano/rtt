@@ -4,7 +4,7 @@ ASGI config for rtt project.
 It exposes the ASGI callable as a module-level variable named ``application``.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/4.0/howto/deployment/asgi/
+https://docs.djangoproject.com/en/5.2/howto/deployment/asgi/
 """
 
 from api.constants import SSE_CHANNEL_DESCENTS
@@ -29,7 +29,7 @@ application = ProtocolTypeRouter({
         path('events/', AuthMiddlewareStack(
             URLRouter(django_eventstream.routing.urlpatterns)
         ), {'channels': [SSE_CHANNEL_DESCENTS]}),
-        re_path(r'', get_asgi_application()),
+        re_path(r'', django_asgi_app),
     ]),
     "websocket": AllowedHostsOriginValidator(
         AuthMiddlewareStack(
