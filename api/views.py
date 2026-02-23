@@ -37,6 +37,7 @@ def do_login(request):
 
 def do_logout(request):
     logout(request)
+    return HttpResponse(status=status.HTTP_204_NO_CONTENT)
 
 
 class UserViewSet(viewsets.ModelViewSet):
