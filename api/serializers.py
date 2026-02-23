@@ -28,7 +28,24 @@ class TrackSerializer(FlexFieldsModelSerializer):
         model = models.Track
         fields = ['id', 'name', 'venue']
         expandable_fields = {
-            'venue': VenueSerializer
+            'venue': VenueSerializer,
+            'variations': ('api.TrackVariationSerializer', {'many': True})
+        }
+
+
+class TrackVariationSerializer(FlexFieldsModelSerializer):
+    display_name = serializers.SerializerMethodField()
+
+    def get_display_name(self, obj):
+        if obj.description:
+            return f"{obj.track.name} — {obj.description}"
+        return f"{obj.track.name} (standard)"
+
+    class Meta:
+        model = models.TrackVariation
+        fields = ['id', 'track', 'description', 'display_name']
+        expandable_fields = {
+            'track': TrackSerializer
         }
 
 
@@ -66,21 +83,26 @@ class DescentSerializer(FlexFieldsModelSerializer):
 
     class Meta:
         model = models.Descent
-        fields = ['id', 'race_pilot', 'track',
+        fields = ['id', 'race_pilot', 'track_variation',
                   'start', 'end', 'status', 'duration']
         expandable_fields = {
             'race_pilot': ('api.RacePilotSerializer', {'many': False}),
-            'track': TrackSerializer
+            'track_variation': TrackVariationSerializer
         }
 
 
 class VenueSerializer(FlexFieldsModelSerializer):
     tracks = TrackSerializer(read_only=True, many=True,
                              source='track_set', omit=['venue'])
+    track_variations = serializers.SerializerMethodField()
+
+    def get_track_variations(self, venue):
+        variations = models.TrackVariation.objects.filter(track__venue=venue)
+        return TrackVariationSerializer(variations, many=True).data
 
     class Meta:
         model = models.Venue
-        fields = ['id', 'name', 'tracks']
+        fields = ['id', 'name', 'tracks', 'track_variations']
 
 
 class RaceSerializer(FlexFieldsModelSerializer):

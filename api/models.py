@@ -35,6 +35,24 @@ class Track(models.Model):
         db_table = "track"
 
 
+class TrackVariation(models.Model):
+    '''A variation of a track, e.g. when a section is bypassed for repairs'''
+    track = models.ForeignKey(Track, on_delete=models.CASCADE, related_name='variations')
+    description = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text='Description of the variation (e.g. "Bypass area under reparation"). Leave blank for standard route.'
+    )
+
+    def __str__(self):
+        if self.description:
+            return f"{self.track.name} — {self.description}"
+        return f"{self.track.name} (standard)"
+
+    class Meta:
+        db_table = "track_variation"
+
+
 class Championship(models.Model):
     '''Long term championship'''
     name = models.CharField(max_length=100)
@@ -85,7 +103,9 @@ class Descent(models.Model, ModelDiffMixin):
 
     race_pilot = models.ForeignKey(
         RacePilot, related_name="descents", on_delete=models.CASCADE)
-    track = models.ForeignKey(Track, on_delete=models.CASCADE)
+    track_variation = models.ForeignKey(
+        TrackVariation, related_name="descents", on_delete=models.CASCADE
+    )
     start = models.DateTimeField(null=True, blank=True)
     end = models.DateTimeField(null=True, blank=True)
     status = models.CharField(
@@ -107,8 +127,8 @@ class Descent(models.Model, ModelDiffMixin):
         return (self.end - self.start).total_seconds() * 100
 
     def __str__(self):
-        return f"{self.race_pilot} - {self.track.name}"
+        return f"{self.race_pilot} - {self.track_variation}"
 
     class Meta:
         db_table = "descent"
-        unique_together = ('race_pilot', 'track')
+        unique_together = ('race_pilot', 'track_variation')

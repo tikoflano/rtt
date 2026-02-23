@@ -21,10 +21,22 @@ class ChampionshipAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
 
 
+class TrackVariationInline(admin.TabularInline):
+    model = models.TrackVariation
+    extra = 1
+
+
 @admin.register(models.Track)
 class TrackAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'venue')
     list_filter = ('venue',)
+    inlines = [TrackVariationInline]
+
+
+@admin.register(models.TrackVariation)
+class TrackVariationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'track', 'description')
+    list_filter = ('track__venue',)
 
 
 @admin.register(models.Race)
@@ -42,8 +54,8 @@ class DescentAdminForm(forms.ModelForm):
 @admin.register(models.Descent)
 class DescentAdmin(admin.ModelAdmin):
     form = DescentAdminForm
-    fields = ('race', 'race_pilot', 'track', 'start', 'end', 'status')
-    list_display = ('id', 'race', 'pilot', 'track', 'start')
+    fields = ('race', 'race_pilot', 'track_variation', 'start', 'end', 'status')
+    list_display = ('id', 'race', 'pilot', 'track_variation', 'start')
 
     def race(self, obj):
         return obj.race_pilot.race
@@ -70,15 +82,15 @@ class DescentAdmin(admin.ModelAdmin):
             if db_field.name == "race_pilot":
                 kwargs["queryset"] = models.RacePilot.objects.filter(
                     pilot=obj.race_pilot.pilot)
-            elif db_field.name == "track":
-                kwargs["queryset"] = models.Track.objects.filter(
-                    id=obj.track.id)
+            elif db_field.name == "track_variation":
+                kwargs["queryset"] = models.TrackVariation.objects.filter(
+                    track__venue=obj.race_pilot.race.venue)
 
         else:
             if db_field.name == "race_pilot":
                 kwargs["queryset"] = models.RacePilot.objects.none()
-            elif db_field.name == "track":
-                kwargs["queryset"] = models.Track.objects.none()
+            elif db_field.name == "track_variation":
+                kwargs["queryset"] = models.TrackVariation.objects.none()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 

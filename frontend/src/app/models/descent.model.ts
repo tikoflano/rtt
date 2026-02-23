@@ -1,9 +1,16 @@
 import { RacePilot } from './pilot.model';
 
+export interface TrackVariation {
+  readonly id: number;
+  track: number | { id: number; name: string };
+  description: string;
+  display_name: string;
+}
+
 export interface Descent {
   readonly id: number;
   race_pilot: RacePilot;
-  track: string;
+  track_variation: TrackVariation;
   start: string | null;
   end: string | null;
   status: DescentStatus;
