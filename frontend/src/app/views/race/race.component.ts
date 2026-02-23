@@ -22,9 +22,10 @@ const TIMER_STATUS_CHANGES: Record<TimerEvent, DescentStatus> = {
 };
 
 @Component({
-  selector: 'app-race',
-  templateUrl: './race.component.html',
-  styleUrls: ['./race.component.scss'],
+    selector: 'app-race',
+    templateUrl: './race.component.html',
+    styleUrls: ['./race.component.scss'],
+    standalone: false
 })
 export class RaceComponent implements OnInit {
   public readonly displayedColumns = [

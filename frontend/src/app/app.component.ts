@@ -4,9 +4,10 @@ import { first, map, startWith } from 'rxjs/operators';
 import { TimerService } from './services/timer.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent implements OnInit {
   public loadingTimer$: Observable<boolean>;

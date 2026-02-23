@@ -2,7 +2,7 @@
   <mat-card-content>
     <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
       <p>
-        <mat-form-field appearance="standard">
+        <mat-form-field appearance="fill">
           <mat-label>Username</mat-label>
           <input
             [(ngModel)]="model.username"
@@ -18,7 +18,7 @@
       </p>
 
       <p>
-        <mat-form-field appearance="standard">
+        <mat-form-field appearance="fill">
           <mat-label>Password</mat-label>
           <input
             [type]="hide ? 'password' : 'text'"

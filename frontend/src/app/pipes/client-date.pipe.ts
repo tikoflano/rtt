@@ -3,7 +3,8 @@ import { ServerTimeServiceService } from 'app/services/server-time.service';
 import { map, Observable, take, of } from 'rxjs';
 
 @Pipe({
-  name: 'clientDate',
+    name: 'clientDate',
+    standalone: false
 })
 export class ClientDatePipe implements PipeTransform {
   constructor(private serverTimeServiceService: ServerTimeServiceService) {}
