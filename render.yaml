@@ -17,16 +17,6 @@ services:
         fromDatabase:
           name: rtt-db
           property: connectionString
-      - key: REDIS_HOST
-        fromService:
-          type: keyvalue
-          name: rtt-redis
-          property: host
-      - key: REDIS_PORT
-        fromService:
-          type: keyvalue
-          name: rtt-redis
-          property: port
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
@@ -37,7 +27,3 @@ databases:
     plan: free
     databaseName: rtt
     user: rtt
-
-keyValues:
-  - name: rtt-redis
-    plan: free
