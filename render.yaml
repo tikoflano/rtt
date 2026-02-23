@@ -1,6 +1,7 @@
 # Render Blueprint for Race Time Tracker
 # Deploy from: https://dashboard.render.com/blueprints
 # Or connect your repo and Render will detect this file
+# Spec: https://render.com/docs/blueprint-spec
 
 services:
   - type: web
@@ -32,12 +33,12 @@ services:
       - key: DEBUG
         value: "false"
 
+  - type: keyvalue
+    name: rtt-redis
+    plan: free
+
 databases:
   - name: rtt-db
     plan: free
     databaseName: rtt
     user: rtt
-
-keyValues:
-  - name: rtt-redis
-    plan: free
