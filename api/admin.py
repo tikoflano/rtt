@@ -82,7 +82,7 @@ class DescentAdmin(admin.ModelAdmin):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-@ admin.register(models.RacePilot)
+@admin.register(models.RacePilot)
 class RacePilotAdmin(admin.ModelAdmin):
     list_display = ("id", "race", "number", "pilot")
     list_filter = ('race',)
