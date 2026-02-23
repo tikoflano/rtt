@@ -23,7 +23,7 @@ dj-database-url==2.2.0
 whitenoise==6.8.2
 
 # Webpack / Frontend integration
-django-webpack-loader==2.1.0
+django-webpack-loader==2.0.1
 
 # Utilities
 django-extensions==3.2.3
