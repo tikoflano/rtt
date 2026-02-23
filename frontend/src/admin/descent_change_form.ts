@@ -14,12 +14,15 @@ interface RacePilot {
 }
 
 interface Venue {
-  tracks: Track[];
+  tracks: { id: number; name: string }[];
+  track_variations: TrackVariation[];
 }
 
-interface Track {
+interface TrackVariation {
   id: number;
-  name: string;
+  track: number;
+  description: string;
+  display_name: string;
 }
 
 // Trigger an ajax request to populate the Race Pilot field with the response pilots
@@ -29,7 +32,7 @@ window.django
     const race_id = window.django.jQuery(this).val();
 
     window.django.jQuery('#id_race_pilot').empty();
-    window.django.jQuery('#id_track').empty();
+    window.django.jQuery('#id_track_variation').empty();
 
     if (!race_id) return;
 
@@ -63,21 +66,21 @@ window.django
       url: `/api/races/${race_id}?fields=venue&expand=venue&omit=venue.id,venue.name`,
       success: function (data: { venue: Venue }) {
         window.django
-          .jQuery('#id_track')
+          .jQuery('#id_track_variation')
           .append(
             window.django
               .jQuery('<option></option>')
               .val('')
-              .text('Select track')
+              .text('Select track variation')
           );
-        window.django.jQuery.each(data.venue.tracks, function (_, track) {
+        window.django.jQuery.each(data.venue.track_variations, function (_, variation) {
           window.django
-            .jQuery('#id_track')
+            .jQuery('#id_track_variation')
             .append(
               window.django
                 .jQuery('<option></option>')
-                .val(track.id)
-                .text(track.name)
+                .val(variation.id)
+                .text(variation.display_name)
             );
         });
       },

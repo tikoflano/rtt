@@ -978,7 +978,7 @@ components:
           readOnly: true
         race_pilot:
           type: integer
-        track:
+        track_variation:
           type: integer
         start:
           type: string
@@ -995,7 +995,7 @@ components:
       - duration
       - id
       - race_pilot
-      - track
+      - track_variation
     PatchedDescent:
       type: object
       description: |-
@@ -1009,7 +1009,7 @@ components:
           readOnly: true
         race_pilot:
           type: integer
-        track:
+        track_variation:
           type: integer
         start:
           type: string
@@ -1022,6 +1022,23 @@ components:
         duration:
           type: integer
           readOnly: true
+    TrackVariation:
+      type: object
+      description: A variation of a track (e.g. when a section is bypassed for repairs)
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        track:
+          type: integer
+        description:
+          type: string
+          maxLength: 255
+          description: Description of the variation. Leave blank for standard route.
+        display_name:
+          type: string
+          readOnly: true
+          description: Human-readable display (e.g. "Track Name — Bypass area under reparation")
     PatchedPilot:
       type: object
       description: |-
@@ -1255,10 +1272,16 @@ components:
           items:
             $ref: '#/components/schemas/Track'
           readOnly: true
+        track_variations:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackVariation'
+          readOnly: true
       required:
       - id
       - name
       - tracks
+      - track_variations
   securitySchemes:
     basicAuth:
       type: http

@@ -17,7 +17,7 @@ export class DescentService {
   private patchLoading$: BehaviorSubject<boolean> = new BehaviorSubject(true);
   private patchError$: Subject<string> = new Subject();
 
-  private expands: string[] = ['race_pilot', 'track'];
+  private expands: string[] = ['race_pilot', 'track_variation'];
   private omits: string[] = ['race_pilot.descents'];
   private fields: string[] = [];
 
