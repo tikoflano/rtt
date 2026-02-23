@@ -1,14 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TimerService } from 'app/services/timer.service';
-import { Observable, BehaviorSubject, combineLatest, merge } from 'rxjs';
 import {
+  Observable,
+  BehaviorSubject,
+  combineLatest,
+  merge,
   first,
   map,
   filter,
   withLatestFrom,
   skipUntil,
   shareReplay,
-} from 'rxjs/operators';
+} from 'rxjs';
 
 export interface TimerStatusChangedEventPayload {
   event: TimerEvent;

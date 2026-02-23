@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { first, map, startWith } from 'rxjs/operators';
+import { first, map, startWith } from 'rxjs';
 import { TimerService } from './services/timer.service';
 
 @Component({

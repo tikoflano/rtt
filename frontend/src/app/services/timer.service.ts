@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { share } from 'rxjs/operators';
+import { share } from 'rxjs';
 import { fromWorker } from 'observable-webworker';
 
 @Injectable({

@@ -20,7 +20,6 @@
     "@angular/platform-browser": "^19.2.18",
     "@angular/platform-browser-dynamic": "^19.2.18",
     "@angular/router": "^19.2.18",
-    "hammerjs": "^2.0.8",
     "material-icons": "^1.11.10",
     "observable-webworker": "^4.0.1",
     "rxjs": "~7.5.0",

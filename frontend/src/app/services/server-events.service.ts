@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, share, tap } from 'rxjs/operators';
+import { map, share, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

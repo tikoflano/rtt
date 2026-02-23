@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { share } from 'rxjs/operators';
+import { share } from 'rxjs';
 import { User } from 'app/models/user.model';
 import { LoginInfo } from 'app/models/login-info.model';
 

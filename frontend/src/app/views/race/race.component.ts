@@ -12,7 +12,7 @@ import {
 import { DescentService } from 'app/services/descent.service';
 import { ServerTimeServiceService } from 'app/services/server-time.service';
 import { Observable } from 'rxjs';
-import { first, switchMap } from 'rxjs/operators';
+import { first, switchMap } from 'rxjs';
 
 const TIMER_STATUS_CHANGES: Record<TimerEvent, DescentStatus> = {
   [TimerEvent.START]: DescentStatus.RUNNING,

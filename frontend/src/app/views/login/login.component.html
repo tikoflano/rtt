@@ -12,7 +12,7 @@
             matInputAutofocus
             tabindex="1"
             required
-          />
+            />
           <mat-icon matSuffix>person</mat-icon>
         </mat-form-field>
       </p>
@@ -28,7 +28,7 @@
             matInput
             tabindex="2"
             required
-          />
+            />
           <button
             type="button"
             mat-icon-button
@@ -36,13 +36,15 @@
             (click)="hide = !hide"
             [attr.aria-label]="'Hide password'"
             [attr.aria-pressed]="hide"
-          >
+            >
             <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
           </button>
         </mat-form-field>
       </p>
 
-      <p class="error" *ngIf="error">{{ error }}</p>
+      @if (error) {
+        <p class="error">{{ error }}</p>
+      }
 
       <div class="button">
         <button
@@ -51,7 +53,7 @@
           color="primary"
           tabindex="3"
           [disabled]="loginForm.invalid || loading"
-        >
+          >
           Login
         </button>
       </div>

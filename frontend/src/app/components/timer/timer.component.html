@@ -1,37 +1,38 @@
 <div class="timer">
   <div>{{ (displayTimer$ | async) ?? 0 | duration }}</div>
 
-  <ng-container *ngIf="(status$ | async) !== TimerStatus.STOPPED">
-    <button
-      *ngIf="(status$ | async) === TimerStatus.NONE"
-      (click)="triggerEvent(TimerEvent.START)"
-      mat-icon-button
-    >
-      <mat-icon>play_arrow</mat-icon>
-    </button>
-
-    <button
-      *ngIf="(status$ | async) === TimerStatus.PAUSED"
-      (click)="triggerEvent(TimerEvent.RESUME)"
-      mat-icon-button
-    >
-      <mat-icon>update</mat-icon>
-    </button>
-
-    <button
-      *ngIf="(status$ | async) === TimerStatus.PAUSED"
-      (click)="triggerEvent(TimerEvent.STOP)"
-      mat-icon-button
-    >
-      <mat-icon>stop</mat-icon>
-    </button>
-
-    <button
-      *ngIf="(status$ | async) === TimerStatus.RUNNING"
-      (click)="triggerEvent(TimerEvent.PAUSE)"
-      mat-icon-button
-    >
-      <mat-icon>pause</mat-icon>
-    </button>
-  </ng-container>
+  @if ((status$ | async) !== TimerStatus.STOPPED) {
+    @if ((status$ | async) === TimerStatus.NONE) {
+      <button
+        (click)="triggerEvent(TimerEvent.START)"
+        mat-icon-button
+        >
+        <mat-icon>play_arrow</mat-icon>
+      </button>
+    }
+    @if ((status$ | async) === TimerStatus.PAUSED) {
+      <button
+        (click)="triggerEvent(TimerEvent.RESUME)"
+        mat-icon-button
+        >
+        <mat-icon>update</mat-icon>
+      </button>
+    }
+    @if ((status$ | async) === TimerStatus.PAUSED) {
+      <button
+        (click)="triggerEvent(TimerEvent.STOP)"
+        mat-icon-button
+        >
+        <mat-icon>stop</mat-icon>
+      </button>
+    }
+    @if ((status$ | async) === TimerStatus.RUNNING) {
+      <button
+        (click)="triggerEvent(TimerEvent.PAUSE)"
+        mat-icon-button
+        >
+        <mat-icon>pause</mat-icon>
+      </button>
+    }
+  }
 </div>

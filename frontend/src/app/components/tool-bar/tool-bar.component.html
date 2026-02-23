@@ -5,8 +5,10 @@
     </button>
     <span>Race Time Tracker</span>
     <span class="spacer"></span>
-    <span *ngIf="this.authenticated$ | async">
-      <a mat-button href="/logout">Logout</a>
-    </span>
+    @if (this.authenticated$ | async) {
+      <span>
+        <a mat-button href="/logout">Logout</a>
+      </span>
+    }
   </mat-toolbar>
 </p>
