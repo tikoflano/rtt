@@ -12,22 +12,22 @@ describe('RaceComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RaceComponent ],
-      providers: [
+    imports: [RaceComponent],
+    providers: [
         {
-          provide: DescentService,
-          useValue: {
-            getDescents: () => of([]),
-            getLoading: () => of(false),
-            getError: () => of(''),
-            loadDescents: () => {},
-            updateDescent: () => of({})
-          }
+            provide: DescentService,
+            useValue: {
+                getDescents: () => of([]),
+                getLoading: () => of(false),
+                getError: () => of(''),
+                loadDescents: () => { },
+                updateDescent: () => of({})
+            }
         },
         { provide: ServerTimeServiceService, useValue: { getServerOffset: () => of(0) } }
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    })
+    ],
+    schemas: [NO_ERRORS_SCHEMA],
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(RaceComponent);

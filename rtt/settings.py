@@ -92,12 +92,12 @@ WSGI_APPLICATION = 'rtt.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'rtt',
-        'USER': 'root',
-        'PASSWORD': 'root',
+        'USER': 'rtt',
+        'PASSWORD': 'rtt',
         'HOST': 'db',
-        'PORT': '',
+        'PORT': '5432',
     }
 }
 

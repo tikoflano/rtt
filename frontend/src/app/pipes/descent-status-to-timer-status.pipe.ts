@@ -2,10 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { TimerStatus } from 'app/components/timer/timer.component';
 import { DescentStatus } from 'app/models/descent.model';
 
-@Pipe({
-    name: 'descentStatusToTimerStatus',
-    standalone: false
-})
+@Pipe({ name: 'descentStatusToTimerStatus' })
 export class DescentStatusToTimerStatusPipe implements PipeTransform {
   transform(value: DescentStatus): TimerStatus {
     const map: Record<DescentStatus, TimerStatus> = {

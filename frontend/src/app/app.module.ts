@@ -32,19 +32,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { AutofocusDirective } from './directives/autofocus.directive';
 
-@NgModule({ declarations: [
-        AppComponent,
-        RaceComponent,
-        TimerComponent,
-        ToolBarComponent,
-        DurationPipe,
-        ClientDatePipe,
-        DateDiffPipe,
-        DescentStatusToTimerStatusPipe,
-        NotFoundComponent,
-        LoginComponent,
-        AutofocusDirective,
-    ],
+@NgModule({ declarations: [AppComponent],
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
         MatSliderModule,
@@ -57,7 +45,16 @@ import { AutofocusDirective } from './directives/autofocus.directive';
         MatFormFieldModule,
         MatInputModule,
         BrowserAnimationsModule,
-        FormsModule], providers: [
+        FormsModule, RaceComponent,
+        TimerComponent,
+        ToolBarComponent,
+        DurationPipe,
+        ClientDatePipe,
+        DateDiffPipe,
+        DescentStatusToTimerStatusPipe,
+        NotFoundComponent,
+        LoginComponent,
+        AutofocusDirective], providers: [
         // https://stackoverflow.com/a/41614974/974822s
         {
             provide: APP_INITIALIZER,

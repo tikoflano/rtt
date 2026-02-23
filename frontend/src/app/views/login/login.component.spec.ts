@@ -13,13 +13,12 @@ describe('LoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LoginComponent ],
-      imports: [ RouterTestingModule, FormsModule ],
-      providers: [
+    imports: [RouterTestingModule, FormsModule, LoginComponent],
+    providers: [
         { provide: UserService, useValue: { getIsAuthenticated: () => of(false), login: () => of(null) } }
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    })
+    ],
+    schemas: [NO_ERRORS_SCHEMA],
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);

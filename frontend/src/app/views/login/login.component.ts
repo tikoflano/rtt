@@ -1,10 +1,16 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginInfo } from 'app/models/login-info.model';
 import { UserService } from 'app/services/user.service';
 import { catchError, finalize, of, Subscription } from 'rxjs';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { AutofocusDirective } from '../../directives/autofocus.directive';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton, MatButton } from '@angular/material/button';
 
 interface ErrorResponse {
   error: string;
@@ -14,7 +20,7 @@ interface ErrorResponse {
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
-    standalone: false
+    imports: [MatCard, MatCardContent, FormsModule, MatFormField, MatLabel, MatInput, AutofocusDirective, MatIcon, MatSuffix, MatIconButton, MatButton]
 })
 export class LoginComponent implements OnInit, OnDestroy {
   private subs: Subscription = new Subscription();

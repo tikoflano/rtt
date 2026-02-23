@@ -2,10 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { ServerTimeServiceService } from 'app/services/server-time.service';
 import { map, Observable, take, of } from 'rxjs';
 
-@Pipe({
-    name: 'clientDate',
-    standalone: false
-})
+@Pipe({ name: 'clientDate' })
 export class ClientDatePipe implements PipeTransform {
   constructor(private serverTimeServiceService: ServerTimeServiceService) {}
 

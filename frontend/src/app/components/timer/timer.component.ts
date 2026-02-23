@@ -12,6 +12,10 @@ import {
   skipUntil,
   shareReplay,
 } from 'rxjs';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { AsyncPipe } from '@angular/common';
+import { DurationPipe } from '../../pipes/duration.pipe';
 
 export interface TimerStatusChangedEventPayload {
   event: TimerEvent;
@@ -43,7 +47,7 @@ const TIMER_STATUS_CHANGES: Record<TimerEvent, TimerStatus> = {
     selector: 'app-timer',
     templateUrl: './timer.component.html',
     styleUrls: ['./timer.component.scss'],
-    standalone: false
+    imports: [MatIconButton, MatIcon, AsyncPipe, DurationPipe]
 })
 export class TimerComponent implements OnInit {
   public TimerStatus = TimerStatus;

@@ -8,20 +8,18 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
+    imports: [
         RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
-      ],
-      providers: [
+    ],
+    declarations: [AppComponent],
+    providers: [
         {
-          provide: TimerService,
-          useValue: { getTimer: () => of(0) }
+            provide: TimerService,
+            useValue: { getTimer: () => of(0) }
         }
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
+    ],
+    schemas: [NO_ERRORS_SCHEMA],
+}).compileComponents();
   });
 
   it('should create the app', () => {
