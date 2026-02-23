@@ -2,6 +2,9 @@
 # Deploy from: https://dashboard.render.com/blueprints
 # Or connect your repo and Render will detect this file
 # Spec: https://render.com/docs/blueprint-spec
+#
+# Redis/Key Value omitted for free tier - app uses in-memory channels (single instance).
+# To add Redis: create Key Value manually in dashboard, add REDIS_URL to env vars.
 
 services:
   - type: web
@@ -18,27 +21,10 @@ services:
         fromDatabase:
           name: rtt-db
           property: connectionString
-      - key: REDIS_HOST
-        fromService:
-          type: keyvalue
-          name: rtt-redis
-          property: host
-      - key: REDIS_PORT
-        fromService:
-          type: keyvalue
-          name: rtt-redis
-          property: port
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
         value: "false"
-
-  - type: keyvalue
-    name: rtt-redis
-    plan: free
-    ipAllowList:
-      - source: 0.0.0.0/0
-        description: allow all (internal + external)
 
 databases:
   - name: rtt-db
