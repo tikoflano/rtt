@@ -36,9 +36,6 @@ services:
   - type: keyvalue
     name: rtt-redis
     plan: free
-    ipAllowList:
-      - source: 0.0.0.0/0
-        description: allow all (internal + external)
 
 databases:
   - name: rtt-db
