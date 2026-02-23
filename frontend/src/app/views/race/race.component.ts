@@ -13,6 +13,16 @@ import { DescentService } from 'app/services/descent.service';
 import { ServerTimeServiceService } from 'app/services/server-time.service';
 import { Observable } from 'rxjs';
 import { first, switchMap } from 'rxjs';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
+import { TimerComponent } from '../../components/timer/timer.component';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { AsyncPipe, UpperCasePipe } from '@angular/common';
+import { ClientDatePipe } from '../../pipes/client-date.pipe';
+import { DateDiffPipe } from '../../pipes/date-diff.pipe';
+import { DescentStatusToTimerStatusPipe } from '../../pipes/descent-status-to-timer-status.pipe';
 
 const TIMER_STATUS_CHANGES: Record<TimerEvent, DescentStatus> = {
   [TimerEvent.START]: DescentStatus.RUNNING,
@@ -25,7 +35,7 @@ const TIMER_STATUS_CHANGES: Record<TimerEvent, DescentStatus> = {
     selector: 'app-race',
     templateUrl: './race.component.html',
     styleUrls: ['./race.component.scss'],
-    standalone: false
+    imports: [MatCard, MatCardContent, MatProgressSpinner, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, TimerComponent, MatIconButton, MatIcon, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, AsyncPipe, UpperCasePipe, ClientDatePipe, DateDiffPipe, DescentStatusToTimerStatusPipe]
 })
 export class RaceComponent implements OnInit {
   public readonly displayedColumns = [

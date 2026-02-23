@@ -5,17 +5,16 @@ import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 @Component({
-  template: '<input matInput matInputAutofocus>',
-  standalone: false,
+    template: '<input matInput matInputAutofocus>',
+    imports: [MatInputModule],
 })
 class TestComponent {}
 
 describe('AutofocusDirective', () => {
   it('should create an instance', () => {
     TestBed.configureTestingModule({
-      declarations: [AutofocusDirective, TestComponent],
-      imports: [MatInputModule],
-    });
+    imports: [MatInputModule, AutofocusDirective, TestComponent],
+});
     const fixture = TestBed.createComponent(TestComponent);
     const input = fixture.debugElement.query(By.css('input'));
     expect(input).toBeTruthy();

@@ -16,7 +16,7 @@ django-eventstream==5.1.0
 django-grip==3.2.0
 
 # Database
-mysqlclient==2.2.6
+psycopg[binary]==3.2.3
 
 # Webpack / Frontend integration
 django-webpack-loader==2.1.0

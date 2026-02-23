@@ -1,9 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({
-    name: 'dateDiff',
-    standalone: false
-})
+@Pipe({ name: 'dateDiff' })
 export class DateDiffPipe implements PipeTransform {
   constructor() {}
 

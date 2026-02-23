@@ -12,13 +12,13 @@ describe('ToolBarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ToolBarComponent ],
-      providers: [
+    imports: [ToolBarComponent],
+    providers: [
         { provide: ServerTimeServiceService, useValue: { getServerOffset: () => of(0) } },
         { provide: UserService, useValue: { getIsAuthenticated: () => of(false) } }
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-    })
+    ],
+    schemas: [NO_ERRORS_SCHEMA],
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(ToolBarComponent);

@@ -13,12 +13,11 @@ describe('TimerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TimerComponent, DurationPipe ],
-      imports: [ MatIconModule, MatButtonModule ],
-      providers: [
+    imports: [MatIconModule, MatButtonModule, TimerComponent, DurationPipe],
+    providers: [
         { provide: TimerService, useValue: { getTimer: () => of(0) } }
-      ]
-    })
+    ]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(TimerComponent);
