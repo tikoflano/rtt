@@ -49,8 +49,31 @@ class TrackVariation(models.Model):
             return f"{self.track.name} — {self.description}"
         return f"{self.track.name} (standard)"
 
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        super().clean()
+        if not self.description:
+            existing = TrackVariation.objects.filter(
+                track=self.track, description=''
+            ).exclude(pk=self.pk)
+            if existing.exists():
+                raise ValidationError(
+                    {'description': 'Only one variation per track can have an empty description (standard variation).'}
+                )
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
     class Meta:
         db_table = "track_variation"
+        constraints = [
+            models.UniqueConstraint(
+                fields=['track'],
+                condition=models.Q(description=''),
+                name='unique_standard_variation_per_track',
+            ),
+        ]
 
 
 class Championship(models.Model):
