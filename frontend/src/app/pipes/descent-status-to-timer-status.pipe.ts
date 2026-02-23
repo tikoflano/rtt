@@ -3,7 +3,8 @@ import { TimerStatus } from 'app/components/timer/timer.component';
 import { DescentStatus } from 'app/models/descent.model';
 
 @Pipe({
-  name: 'descentStatusToTimerStatus',
+    name: 'descentStatusToTimerStatus',
+    standalone: false
 })
 export class DescentStatusToTimerStatusPipe implements PipeTransform {
   transform(value: DescentStatus): TimerStatus {

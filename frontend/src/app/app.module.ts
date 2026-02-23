@@ -16,11 +16,7 @@ import { RaceComponent } from './views/race/race.component';
 import { TimerComponent } from './components/timer/timer.component';
 import { ToolBarComponent } from './components/tool-bar/tool-bar.component';
 import { DurationPipe } from './pipes/duration.pipe';
-import {
-  HttpClientModule,
-  HttpClientXsrfModule,
-  HTTP_INTERCEPTORS,
-} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi, withXsrfConfiguration } from '@angular/common/http';
 import { ServerTimeServiceService } from './services/server-time.service';
 import { DescentService } from './services/descent.service';
 import { ClientDatePipe } from './pipes/client-date.pipe';
@@ -36,61 +32,53 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { AutofocusDirective } from './directives/autofocus.directive';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    RaceComponent,
-    TimerComponent,
-    ToolBarComponent,
-    DurationPipe,
-    ClientDatePipe,
-    DateDiffPipe,
-    DescentStatusToTimerStatusPipe,
-    NotFoundComponent,
-    LoginComponent,
-    AutofocusDirective,
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    HttpClientXsrfModule.withOptions({
-      cookieName: 'csrftoken',
-      headerName: 'X-CSRFTOKEN',
-    }),
-    AppRoutingModule,
-    MatSliderModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTableModule,
-    MatCardModule,
-    MatProgressSpinnerModule,
-    MatFormFieldModule,
-    MatInputModule,
-    BrowserAnimationsModule,
-    FormsModule,
-  ],
-  providers: [
-    // https://stackoverflow.com/a/41614974/974822s
-    {
-      provide: APP_INITIALIZER,
-      multi: true,
-      deps: [ServerTimeServiceService],
-      useFactory: (serverTimeServiceService: ServerTimeServiceService) => () =>
-        null,
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useFactory: function (router: Router) {
-        return new AuthInterceptor(router);
-      },
-      multi: true,
-      deps: [Router],
-    },
-    ServerTimeServiceService,
-    DescentService,
-    ClientDatePipe,
-  ],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [
+        AppComponent,
+        RaceComponent,
+        TimerComponent,
+        ToolBarComponent,
+        DurationPipe,
+        ClientDatePipe,
+        DateDiffPipe,
+        DescentStatusToTimerStatusPipe,
+        NotFoundComponent,
+        LoginComponent,
+        AutofocusDirective,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        MatSliderModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTableModule,
+        MatCardModule,
+        MatProgressSpinnerModule,
+        MatFormFieldModule,
+        MatInputModule,
+        BrowserAnimationsModule,
+        FormsModule], providers: [
+        // https://stackoverflow.com/a/41614974/974822s
+        {
+            provide: APP_INITIALIZER,
+            multi: true,
+            deps: [ServerTimeServiceService],
+            useFactory: (serverTimeServiceService: ServerTimeServiceService) => () => null,
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useFactory: function (router: Router) {
+                return new AuthInterceptor(router);
+            },
+            multi: true,
+            deps: [Router],
+        },
+        ServerTimeServiceService,
+        DescentService,
+        ClientDatePipe,
+        provideHttpClient(withInterceptorsFromDi(), withXsrfConfiguration({
+            cookieName: 'csrftoken',
+            headerName: 'X-CSRFTOKEN',
+        })),
+    ] })
 export class AppModule {}

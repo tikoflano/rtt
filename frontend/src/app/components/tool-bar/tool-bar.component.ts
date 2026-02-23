@@ -4,9 +4,10 @@ import { UserService } from 'app/services/user.service';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-tool-bar',
-  templateUrl: './tool-bar.component.html',
-  styleUrls: ['./tool-bar.component.scss'],
+    selector: 'app-tool-bar',
+    templateUrl: './tool-bar.component.html',
+    styleUrls: ['./tool-bar.component.scss'],
+    standalone: false
 })
 export class ToolBarComponent implements OnInit {
   public offset$: Observable<number>;

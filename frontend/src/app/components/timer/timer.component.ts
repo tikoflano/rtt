@@ -1,14 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TimerService } from 'app/services/timer.service';
-import { Observable, BehaviorSubject, combineLatest, merge } from 'rxjs';
 import {
+  Observable,
+  BehaviorSubject,
+  combineLatest,
+  merge,
   first,
   map,
   filter,
   withLatestFrom,
   skipUntil,
   shareReplay,
-} from 'rxjs/operators';
+} from 'rxjs';
 
 export interface TimerStatusChangedEventPayload {
   event: TimerEvent;
@@ -37,9 +40,10 @@ const TIMER_STATUS_CHANGES: Record<TimerEvent, TimerStatus> = {
 };
 
 @Component({
-  selector: 'app-timer',
-  templateUrl: './timer.component.html',
-  styleUrls: ['./timer.component.scss'],
+    selector: 'app-timer',
+    templateUrl: './timer.component.html',
+    styleUrls: ['./timer.component.scss'],
+    standalone: false
 })
 export class TimerComponent implements OnInit {
   public TimerStatus = TimerStatus;

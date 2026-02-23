@@ -3,7 +3,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { Descent, PartialDescent } from 'app/models/descent.model';
 import { Race } from 'app/models/race.model';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
-import { finalize, shareReplay } from 'rxjs/operators';
+import { finalize, shareReplay } from 'rxjs';
 import { ServerEventsService } from './server-events.service';
 
 @Injectable()

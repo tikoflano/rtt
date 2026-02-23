@@ -12,7 +12,7 @@ import {
 import { DescentService } from 'app/services/descent.service';
 import { ServerTimeServiceService } from 'app/services/server-time.service';
 import { Observable } from 'rxjs';
-import { first, switchMap } from 'rxjs/operators';
+import { first, switchMap } from 'rxjs';
 
 const TIMER_STATUS_CHANGES: Record<TimerEvent, DescentStatus> = {
   [TimerEvent.START]: DescentStatus.RUNNING,
@@ -22,9 +22,10 @@ const TIMER_STATUS_CHANGES: Record<TimerEvent, DescentStatus> = {
 };
 
 @Component({
-  selector: 'app-race',
-  templateUrl: './race.component.html',
-  styleUrls: ['./race.component.scss'],
+    selector: 'app-race',
+    templateUrl: './race.component.html',
+    styleUrls: ['./race.component.scss'],
+    standalone: false
 })
 export class RaceComponent implements OnInit {
   public readonly displayedColumns = [

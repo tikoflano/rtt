@@ -2,7 +2,7 @@
   <mat-card-content>
     <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
       <p>
-        <mat-form-field appearance="standard">
+        <mat-form-field appearance="fill">
           <mat-label>Username</mat-label>
           <input
             [(ngModel)]="model.username"
@@ -12,13 +12,13 @@
             matInputAutofocus
             tabindex="1"
             required
-          />
+            />
           <mat-icon matSuffix>person</mat-icon>
         </mat-form-field>
       </p>
 
       <p>
-        <mat-form-field appearance="standard">
+        <mat-form-field appearance="fill">
           <mat-label>Password</mat-label>
           <input
             [type]="hide ? 'password' : 'text'"
@@ -28,7 +28,7 @@
             matInput
             tabindex="2"
             required
-          />
+            />
           <button
             type="button"
             mat-icon-button
@@ -36,13 +36,15 @@
             (click)="hide = !hide"
             [attr.aria-label]="'Hide password'"
             [attr.aria-pressed]="hide"
-          >
+            >
             <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
           </button>
         </mat-form-field>
       </p>
 
-      <p class="error" *ngIf="error">{{ error }}</p>
+      @if (error) {
+        <p class="error">{{ error }}</p>
+      }
 
       <div class="button">
         <button
@@ -51,7 +53,7 @@
           color="primary"
           tabindex="3"
           [disabled]="loginForm.invalid || loading"
-        >
+          >
           Login
         </button>
       </div>
